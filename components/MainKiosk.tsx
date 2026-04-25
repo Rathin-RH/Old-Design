@@ -532,26 +532,9 @@ const [failureMessage, setFailureMessage] = useState('');
     showToast('Enter code again to retry');
   }, [jobData?.id, showToast, stopJobMonitoring]);
 
-  const goToCodeEntry = useCallback(async () => {
-    const liveStatus = await fetchLivePrinterStatus();
-
-    if (liveStatus === 'maintenance') {
-      setCurrentScreen('maintenance-screen');
-      return;
-    }
-
-    if (
-      liveStatus === 'disconnected' ||
-      liveStatus === 'offline' ||
-      liveStatus === 'error'
-    ) {
-      showToast('Printer unavailable', true);
-      setCurrentScreen('system-error-screen');
-      return;
-    }
-
+  const goToCodeEntry = useCallback(() => {
     setCurrentScreen('code-entry-screen');
-  }, [fetchLivePrinterStatus, showToast]);
+  }, []);
 
   const goToSummary = useCallback(() => {
     setCurrentScreen('summary-screen');

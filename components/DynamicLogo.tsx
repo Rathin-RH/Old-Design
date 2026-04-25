@@ -8,7 +8,7 @@ interface DynamicLogoProps {
 }
 
 export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
-    const activeTheme: DoodleTheme = forceTheme || 'default';
+    const activeTheme: DoodleTheme = forceTheme || 'reva-utsav';
 
     if (activeTheme === 'reva-utsav') {
         return <RevaUtsavDoodle />;

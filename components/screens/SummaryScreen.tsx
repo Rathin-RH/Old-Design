@@ -14,14 +14,10 @@ interface SummaryScreenProps {
 
 export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset, jobData }) => {
     const timeoutRef = useRef<number | null>(null);
-    const [renderKey, setRenderKey] = useState(0);
 
     useEffect(() => {
         let keyTimer: number | null = null;
         if (isActive) {
-            keyTimer = window.setTimeout(() => {
-                setRenderKey(prev => prev + 1);
-            }, 0);
             timeoutRef.current = window.setTimeout(() => {
                 onReset();
                 timeoutRef.current = null;
@@ -33,7 +29,6 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
             }
         }
         return () => {
-            if (keyTimer) clearTimeout(keyTimer);
             if (timeoutRef.current) {
                 clearTimeout(timeoutRef.current);
                 timeoutRef.current = null;
@@ -44,7 +39,6 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
     return (
         <div
             className={`screen summary-wrapper ${isActive ? 'visible' : ''}`}
-            key={renderKey}
             style={{
                 display: isActive ? 'flex' : 'none',
                 flexDirection: 'column',
@@ -54,7 +48,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                 width: '100%',
                 overflow: 'hidden',
                 position: 'relative',
-                padding: '0 80px 100px 80px' // Added bottom padding for the button
+                padding: '0 80px 100px 80px' 
             }}
         >
             {/* NEW Global Top Header: Conversational Success */}
@@ -68,13 +62,13 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                 transform: 'translateY(-40px)'
             }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                    <span className="material-symbols-outlined" style={{ color: '#34d399', fontSize: '28px' }}>check_circle</span>
-                    <span style={{ fontSize: '18px', color: '#34d399', fontWeight: 800, letterSpacing: '4px', textTransform: 'uppercase' }}>
+                    <span className="material-symbols-outlined" style={{ color: '#ffaa00', fontSize: '28px' }}>check_circle</span>
+                    <span style={{ fontSize: '18px', color: '#ffaa00', fontWeight: 800, letterSpacing: '4px', textTransform: 'uppercase' }}>
                         Success!
                     </span>
                 </div>
                 <div style={{ fontSize: '48px', fontWeight: 900, color: '#ffffff', letterSpacing: '-1px', textShadow: '0 10px 30px rgba(0,0,0,0.5)', textAlign: 'center' }}>
-                    <span style={{ color: '#34d399' }}>{jobData?.userName || 'User'}</span>, your documents are ready.
+                    <span style={{ color: '#ffaa00', textTransform: 'uppercase' }}>{jobData?.userName?.split(' ')[0] || 'User'}</span>, your documents are ready.
                 </div>
             </div>
 
@@ -109,28 +103,24 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                         </div>
 
                         {/* 2. Wooden Frame (using natural wood block colors from realistic reference) */}
-                        {/* Top piece */}
                         <div style={{
                             position: 'absolute', top: '30px', left: '0px', width: '380px', height: '25px',
                             background: '#daba94', zIndex: 10,
                             boxShadow: '0 5px 15px rgba(0,0,0,0.6)', borderRadius: '3px 3px 0 0',
                             borderBottom: '1px solid #9a7b50'
                         }}></div>
-                        {/* Bottom piece */}
                         <div style={{
                             position: 'absolute', top: '145px', left: '0px', width: '380px', height: '25px',
                             background: '#ceaa7b', zIndex: 2,
                             boxShadow: '0 15px 30px rgba(0,0,0,0.8)', borderRadius: '0 0 3px 3px',
                             borderTop: '1px solid #8e6c40'
                         }}></div>
-                        {/* Left piece */}
                         <div style={{
                             position: 'absolute', top: '55px', left: '0px', width: '25px', height: '90px',
                             background: '#d1a870', zIndex: 10,
                             boxShadow: '4px 0 15px rgba(0,0,0,0.7)',
                             borderRight: '1px solid #9a7b50'
                         }}></div>
-                        {/* Right piece */}
                         <div style={{
                             position: 'absolute', top: '55px', left: '355px', width: '25px', height: '90px',
                             background: '#d1a870', zIndex: 10,
@@ -153,7 +143,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                                 animation: isActive ? 'paperDispenseHand 6s ease-in-out infinite' : 'none',
                                 transformOrigin: 'top center'
                             }}>
-                                 <div style={{ width: '55px', height: '55px', borderRadius: '50%', background: 'rgba(52,211,153,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', border: '2px solid rgba(52,211,153,0.4)', color: '#10b981' }}>
+                                 <div style={{ width: '55px', height: '55px', borderRadius: '50%', background: 'rgba(255,170,0,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '24px', border: '2px solid rgba(255,170,0,0.4)', color: '#ffaa00' }}>
                                       <span className="material-symbols-outlined" style={{ fontSize: '36px', fontWeight: 800 }}>check</span>
                                  </div>
                                  <div style={{ width: '90%', height: '10px', background: '#cbd5e1', borderRadius: '5px', marginBottom: '18px' }}></div>
@@ -179,7 +169,6 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                                 <span className="material-symbols-outlined" style={{ 
                                     fontSize: '150px', 
                                     color: '#dea370', 
-                                    /* Use the solid variation of the icon for realistic volume */
                                     fontVariationSettings: '"FILL" 1, "wght" 400',
                                     filter: 'drop-shadow(0 20px 25px rgba(0,0,0,0.7))',
                                 }}>
@@ -200,13 +189,13 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                gap: '24px', // Decreased space between elements
+                gap: '24px',
                 zIndex: 100
             }}>
                 <div style={{
-                    fontSize: '22px', // Slightly smaller text
+                    fontSize: '22px',
                     fontWeight: 900,
-                    color: '#34d399',
+                    color: '#ffaa00',
                     letterSpacing: '2px',
                     textTransform: 'uppercase',
                     animation: isActive ? 'fadeInUp 1s ease-out 0.3s forwards' : 'none',
@@ -214,7 +203,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                     display: 'flex',
                     alignItems: 'center',
                     gap: '16px',
-                    textShadow: '0 0 20px rgba(52,211,153,0.4)' // Added glow for extra visibility
+                    textShadow: '0 0 20px rgba(255,170,0,0.4)'
                 }}>
                     <span className="material-symbols-outlined" style={{ animation: 'bounce 2s infinite' }}>south</span>
                     Please collect your documents from below
@@ -225,18 +214,16 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                     className="done-button-dynamic"
                     style={{
                         padding: '0 50px', height: '64px', borderRadius: '32px',
-                        background: 'linear-gradient(135deg, #10b981, #059669)', color: '#fff', border: 'none',
+                        background: 'linear-gradient(135deg, #ffaa00, #ff007f)', color: '#fff', border: 'none',
                         fontSize: '20px', fontWeight: 900, letterSpacing: '4px',
                         textTransform: 'uppercase', cursor: 'pointer',
-                        boxShadow: '0 20px 50px rgba(16,185,129,0.4), inset 0 1px 2px rgba(255,255,255,0.4)',
+                        boxShadow: '0 20px 50px rgba(255,0,127,0.4), inset 0 1px 2px rgba(255,255,255,0.4)',
                         transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)', 
                         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '12px',
                         animation: isActive ? 'fadeInUp 1s ease-out 0.5s forwards' : 'none',
                         opacity: 0
                     }}
                     onClick={onReset}
-                    onPointerDown={(e) => { e.currentTarget.style.transform = 'scale(0.94)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(16,185,129,0.2)'; }}
-                    onPointerUp={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 20px 50px rgba(16,185,129,0.4)'; }}
                 >
                     Done
                     <span className="material-symbols-outlined" style={{ fontSize: '32px' }}>check_circle</span>
@@ -255,7 +242,7 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                 }
 
                 .done-button-dynamic:hover {
-                    box-shadow: 0 0 30px rgba(16,185,129,0.5);
+                    box-shadow: 0 0 30px rgba(255,0,127,0.5);
                     transform: translateY(-2px);
                 }
 
@@ -275,6 +262,11 @@ export const SummaryScreen: React.FC<SummaryScreenProps> = ({ isActive, onReset,
                     50% { transform: translate(-50%, 230px) scale(0.95); opacity: 1; filter: drop-shadow(0 8px 15px rgba(0,0,0,0.7)) brightness(0.9); }
                     60% { transform: translate(-50%, 450px) scale(0.95); opacity: 0; filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6)) brightness(0.95); }
                     100% { transform: translate(-50%, 450px) scale(0.95); opacity: 0; }
+                }
+
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
                 }
             `}</style>
         </div>

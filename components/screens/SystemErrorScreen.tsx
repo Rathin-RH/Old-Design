@@ -2,22 +2,31 @@ import React from 'react';
 
 interface SystemErrorScreenProps {
     isActive: boolean;
-    jobData: {
+    onReset: () => void;
+    message?: string;
+    // Added for compatibility with new design components
+    jobData?: {
         userName: string;
         fileName: string;
         pages: number;
     } | null;
-    onReset: () => void;
-    onRetry: () => void;
+    onRetry?: () => void;
 }
 
-export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, jobData, onReset, onRetry }) => {
+export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ 
+    isActive, 
+    jobData, 
+    onReset, 
+    onRetry,
+    message 
+}) => {
     const firstName = jobData?.userName?.split(' ')[0] || 'there';
+    const finalOnRetry = onRetry || onReset;
 
     return (
         <div 
             className={`screen err-screen ${isActive ? 'visible' : ''}`}
-            style={{ display: isActive ? 'flex' : 'none' }}
+            style={{ display: isActive ? 'flex' : 'none', width: '100%', height: '100%' }}
         >
 
             <div className="err-pop-badge-container err-a1">
@@ -27,7 +36,7 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                         <rect x="29" y="24" width="6" height="15" rx="3" fill="#fff" />
                         <circle cx="32" cy="48" r="4" fill="#fff" />
                     </svg>
-                    <span className="err-pop-text">PRINT ERROR</span>
+                    <span className="err-pop-text">SYSTEM ERROR</span>
                 </div>
             </div>
 
@@ -41,14 +50,14 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                 <div className="err-glass-card">
                     <div className="err-card-border" />
                     <div className="err-apology-content">
-                        <p className="err-apology-main">We apologize for the inconvenience. Something went wrong while printing your document.</p>
-                        <p className="err-retry-line">PLEASE TRY AGAIN.</p>
+                        <p className="err-apology-main">{message || "We apologize for the inconvenience. Something went wrong while processing your request."}</p>
+                        <p className="err-retry-line">PLEASE TRY AGAIN OR CONTACT STAFF.</p>
                     </div>
                 </div>
             </div>
 
 
-            {/* ── WARM AMBIENT GLOW beneath marquee ── */}
+            {/* ── WARM AMBIENT GLOW ── */}
             <div className="err-glow" />
 
             {/* ── BOTTOM SECTION ── */}
@@ -56,7 +65,7 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                 <div className="err-buttons">
                     <button
                         className="err-btn-white"
-                        onClick={onRetry}
+                        onClick={finalOnRetry}
                         onPointerDown={e => (e.currentTarget.style.transform = 'scale(0.95)')}
                         onPointerUp={e => (e.currentTarget.style.transform = '')}
                         onPointerLeave={e => (e.currentTarget.style.transform = '')}
@@ -80,7 +89,10 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
             <style>{`
                 .err-screen {
                     position: absolute;
-                    inset: 0;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -122,8 +134,8 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                     position: relative;
                     max-width: 1000px;
                     background: rgba(255, 255, 255, 0.04);
-                    backdrop-filter: blur(25px);
-                    -webkit-backdrop-filter: blur(25px);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
                     border-radius: 28px;
                     overflow: hidden;
                     box-shadow: 0 20px 80px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.06);
@@ -203,7 +215,7 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                 }
 
 
-                /* ── WARM GLOW beneath marquee ── */
+                /* ── WARM GLOW ── */
                 .err-glow {
                     position: absolute;
                     top: calc(50% + 60px);
@@ -215,11 +227,6 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                     pointer-events: none;
                     z-index: 5;
                     opacity: 0.8;
-                }
-
-                @keyframes amber-pulse {
-                    0%, 100% { border-color: rgba(255, 180, 60, 0.85); }
-                    50%       { border-color: rgba(255, 210, 100, 1); }
                 }
 
                 /* ── BOTTOM ── */
@@ -239,8 +246,8 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                 .err-a3 { animation: err-reveal 0.9s cubic-bezier(0.16,1,0.3,1) both 0.7s; }
 
                 @keyframes err-reveal {
-                    0%   { opacity: 0; transform: translateY(24px); filter: blur(6px); }
-                    100% { opacity: 1; transform: translateY(0);    filter: blur(0); }
+                    0%   { opacity: 0; transform: translateY(24px); }
+                    100% { opacity: 1; transform: translateY(0);    }
                 }
 
                 /* ── Buttons ── */
@@ -285,8 +292,8 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({ isActive, 
                     font-weight: 700;
                     letter-spacing: 0.01em;
                     cursor: pointer;
-                    backdrop-filter: blur(30px);
-                    -webkit-backdrop-filter: blur(30px);
+                    backdrop-filter: blur(12px);
+                    -webkit-backdrop-filter: blur(12px);
                     box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 20px rgba(0,0,0,0.15);
                     transition: transform 0.1s cubic-bezier(0.16, 1, 0.3, 1);
                     touch-action: manipulation;

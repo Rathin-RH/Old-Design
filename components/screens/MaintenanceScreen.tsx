@@ -13,7 +13,7 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
     const handleAdminTap = () => {
         setAdminCounter(prev => {
             const next = prev + 1;
-            if (next >= 6) { // Increased to 6 for the whole-screen tap
+            if (next >= 6) { 
                 onReset();
                 return 0;
             }
@@ -50,7 +50,7 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
         <div 
             className={`screen maint-screen ${isActive ? 'visible' : ''}`}
             onPointerDown={handleScreenTouch}
-            style={{ touchAction: 'none', display: isActive ? 'flex' : 'none' }}
+            style={{ touchAction: 'none', display: isActive ? 'flex' : 'none', width: '100%', height: '100%' }}
         >
             {/* ── Ripple Container ── */}
             {ripples.map(r => (
@@ -92,7 +92,10 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
             <style>{`
                 .maint-screen {
                     position: absolute;
-                    inset: 0;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
                     display: flex;
                     flex-direction: column;
                     align-items: center;
@@ -102,7 +105,7 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
                     overflow: hidden;
                 }
 
-                /* ── CINEMATIC LIGHTING (Static for efficiency) ── */
+                /* ── CINEMATIC LIGHTING ── */
                 .maint-light-leak {
                     position: absolute;
                     top: -20%;
@@ -110,7 +113,7 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
                     width: 140%;
                     height: 140%;
                     background: radial-gradient(circle at center, rgba(255, 183, 77, 0.05) 0%, transparent 60%);
-                    filter: blur(100px);
+                    filter: blur(20px);
                     pointer-events: none;
                 }
 
@@ -120,21 +123,12 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
                     flex-direction: column;
                     align-items: center;
                     animation: maint-reveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+                    width: 100%;
                 }
 
                 @keyframes maint-reveal {
-                    0% { opacity: 0; transform: translateY(20px) scale(0.98); filter: blur(20px); }
-                    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-                }
-
-                /* ── REFINED TYPOGRAPHY ── */
-                .maint-content {
-                    z-index: 10;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    animation: maint-reveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-                    width: 100%;
+                    0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+                    100% { opacity: 1; transform: translateY(0) scale(1); }
                 }
 
                 .maint-headline-container {
@@ -219,7 +213,6 @@ export const MaintenanceScreen: React.FC<MaintenanceScreenProps> = ({ isActive, 
                     100% { transform: translate(-50%, -50%) scale(25); opacity: 0; }
                 }
 
-                /* ── PRESS FEEDBACK ── */
                 .maint-screen:active .maint-main-headline {
                     transform: scale(0.99);
                     filter: brightness(1.1);

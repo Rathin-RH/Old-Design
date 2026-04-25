@@ -23,37 +23,19 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   const intervalRef = useRef<number | null>(null);
   const completionTimerRef = useRef<number | null>(null);
 
-  // Sync with manualProgress if provided and force instant bypass when done
+  // Sync with manualProgress if provided
   useEffect(() => {
     if (manualProgress !== undefined) {
-      setProgress(p => Math.max(p, manualProgress));
+      setProgress(manualProgress);
       if (manualProgress >= 100 && isActive) {
         if (completionTimerRef.current) clearTimeout(completionTimerRef.current);
         completionTimerRef.current = window.setTimeout(() => {
           onComplete();
           completionTimerRef.current = null;
-        }, 50); // Near instantly bypass the "Completed" screen and transition to Summary
+        }, 1500);
       }
     }
   }, [manualProgress, onComplete, isActive]);
-
-  // Synchronized Interpolated Ticker matching physical hardware speeds perfectly
-  useEffect(() => {
-    if (!isActive || manualProgress === undefined || manualProgress >= 100) return;
-    
-    // Exactly matches backend: ~2.5 seconds per page
-    const totalMs = Math.max(pages * 2500, 5000); 
-    const stepMs = totalMs / 98; // Distribute purely so it hits 98% smoothly
-    
-    const ticker = window.setInterval(() => {
-      setProgress(p => {
-        if (p < 98) return p + 1;
-        return p;
-      });
-    }, stepMs);
-
-    return () => clearInterval(ticker);
-  }, [isActive, manualProgress, pages]);
 
   useEffect(() => {
     if (!isActive) {
@@ -134,15 +116,22 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         className={`screen printing-wrap ${isActive ? 'visible' : ''}`} 
         style={{ 
             display: isActive ? 'flex' : 'none', 
+            width: '100%',
+            height: '100%',
             flexDirection: 'row', 
             alignItems: 'center', 
             justifyContent: 'center', 
             gap: '100px', 
             padding: '0 100px',
             position: 'relative',
-            overflow: 'hidden'
+            overflow: 'hidden',
+            background: 'radial-gradient(circle at 10% 10%, rgba(255, 170, 0, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(255, 0, 127, 0.08) 0%, transparent 40%)'
         }}
     >
+        {/* Ambient Glow Blobs */}
+        <div style={{ position: 'absolute', top: '-10%', left: '50%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(255,170,0,0.1) 0%, transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: '-10%', left: '10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(255,0,127,0.1) 0%, transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
+
         <style>{`
             @keyframes spin-slow {
                 100% { transform: rotate(360deg); }
@@ -152,35 +141,39 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
             }
             @keyframes pulse-ring {
                 0% { transform: scale(0.85); opacity: 0; }
-                50% { opacity: 0.8; }
+                50% { opacity: 0.6; }
                 100% { transform: scale(1.4); opacity: 0; }
             }
-            @keyframes float-note {
-                0% { transform: translate(0, 0) scale(0.5) rotate(-15deg); opacity: 0; }
-                50% { opacity: 0.9; transform: translate(60px, -60px) scale(1.2) rotate(15deg); }
-                100% { transform: translate(120px, -120px) scale(0.6) rotate(45deg); opacity: 0; }
+            @keyframes soundwave-expand {
+                0% { transform: scale(1); opacity: 0.6; border-width: 4px; }
+                100% { transform: scale(1.6); opacity: 0; border-width: 1px; }
             }
             @keyframes text-glow-pulse {
-                0%, 100% { filter: drop-shadow(0 0 15px rgba(0, 212, 240, 0.6)); }
-                50% { filter: drop-shadow(0 0 35px rgba(255, 224, 0, 0.8)); }
+                0%, 100% { filter: drop-shadow(0 0 15px rgba(255,170,0,0.3)); }
+                50% { filter: drop-shadow(0 0 35px rgba(255,0,127,0.6)); }
             }
-            .printing-particle {
+            @keyframes dance {
+                0%, 100% { transform: scaleY(1); opacity: 0.6; }
+                50% { transform: scaleY(1.8); opacity: 1; }
+            }
+            .soundwave-ring {
                 position: absolute;
-                font-size: 38px;
-                font-weight: bold;
-                animation: float-note 2.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
-                text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+                inset: -20px;
+                border: 2px solid rgba(255, 170, 0, 0.4);
+                border-radius: 50%;
+                animation: soundwave-expand 2s cubic-bezier(0.2, 0.4, 0.4, 1) infinite;
+                pointer-events: none;
+                z-index: 0;
             }
-            .particle-1 { color: #FFE000; left: -20px; }
-            .particle-2 { color: #00D4F0; top: 30px; left: 40px; font-size: 50px; animation-delay: 0.8s; }
-            .particle-3 { color: #FF2D78; top: -20px; left: 80px; font-size: 32px; animation-delay: 1.6s; }
+            .wave-2 { animation-delay: 0.6s; border-color: rgba(255, 0, 127, 0.3); }
+            .wave-3 { animation-delay: 1.2s; border-color: rgba(138, 43, 226, 0.2); }
             
             @keyframes data-stream {
                 0% { background-position: -200% 0; }
                 100% { background-position: 200% 0; }
             }
             .data-text-highlight {
-                background: linear-gradient(90deg, #FFE000 0%, #FF8C00 33%, #FF2D78 66%, #FFFFFF 100%);
+                background: linear-gradient(135deg, #ffffff 0%, #ffaa00 50%, #ff007f 100%);
                 background-size: 200% auto;
                 color: #fff;
                 background-clip: text;
@@ -193,10 +186,18 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         {/* Left Column: Context & Greeting */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '30px', flex: 1, textAlign: 'left', maxWidth: '750px', zIndex: 10 }}>
             <div style={{ minHeight: '180px' }}>
-                <h2 style={{ fontSize: '92px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-3px', lineHeight: '1.05', display: 'flex' }}>
+                <h2 style={{ 
+                    fontSize: '92px', 
+                    fontWeight: 900, 
+                    marginBottom: '20px', 
+                    letterSpacing: '-3px', 
+                    lineHeight: '1.05', 
+                    display: 'flex',
+                    textShadow: '0 10px 30px rgba(0,0,0,0.3)'
+                }}>
                     <span className={isActive ? "data-text-highlight" : ""}>{typedTitle}</span>
                 </h2>
-                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '36px', fontWeight: 500, lineHeight: '1.4', whiteSpace: 'pre-line' }}>
+                <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '36px', fontWeight: 600, lineHeight: '1.4', whiteSpace: 'pre-line', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
                     {typedSub}
                 </p>
             </div>
@@ -205,25 +206,25 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         {/* Right Column: Giant Progress Indicator */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             
-            {/* Floating Music Notes for Reva Utsav */}
+            {/* Soundwave concentric rings radiating from center */}
             {isActive && progress < 100 && (
-                <div style={{ position: 'absolute', left: '-120px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
-                    <div className="printing-particle particle-1">♫</div>
-                    <div className="printing-particle particle-2">♪</div>
-                    <div className="printing-particle particle-3">✦</div>
-                </div>
+                <>
+                    <div className="soundwave-ring"></div>
+                    <div className="soundwave-ring wave-2"></div>
+                    <div className="soundwave-ring wave-3"></div>
+                </>
             )}
 
-            <div className="circular-progress-container" style={{ position: 'relative', width: '380px', height: '380px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                {/* Dynamic Glow Background (Reva Utsav DJ Vibes) */}
+            <div className="circular-progress-container" style={{ position: 'relative', width: '420px', height: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Dynamic Glow Background */}
                 <div style={{
                     position: 'absolute',
-                    width: '300px',
-                    height: '300px',
+                    width: '320px',
+                    height: '320px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, rgba(0, 212, 240, 0.45) 0%, rgba(0, 212, 240, 0) 70%)',
-                    filter: 'blur(50px)',
-                    opacity: 0.15 + (progress / 100) * 0.45,
+                    background: 'radial-gradient(circle, #ffaa00 0%, #ff007f 100%)',
+                    filter: 'blur(20px)',
+                    opacity: 0.1 + (progress / 100) * 0.4,
                     transition: 'opacity 0.3s',
                 }} />
                 
@@ -231,61 +232,71 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 {isActive && progress < 100 && (
                     <>
                         <div style={{
-                            position: 'absolute', inset: '25px', borderRadius: '50%', border: '3px solid rgba(0, 212, 240, 0.6)',
-                            animation: 'pulse-ring 2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite', pointerEvents: 'none'
-                        }}></div>
-                        <div style={{
-                            position: 'absolute', inset: '25px', borderRadius: '50%', border: '4px solid rgba(255, 45, 120, 0.5)',
-                            animation: 'pulse-ring 2s cubic-bezier(0.2, 0.6, 0.3, 1) infinite 1s', pointerEvents: 'none'
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(255, 170, 0, 0.4)',
+                            animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite', pointerEvents: 'none'
                         }}></div>
                     </>
                 )}
 
-                <svg width="380" height="380" style={{ position: 'absolute', zIndex: 2 }}>
-                    <defs>
-                        <linearGradient id="revaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#FFE000" />
-                            <stop offset="50%" stopColor="#FF2D78" />
-                            <stop offset="100%" stopColor="#00D4F0" />
-                        </linearGradient>
-                    </defs>
+                {/* Background Track for the radial bars */}
+                <div style={{
+                    position: 'absolute',
+                    width: '320px',
+                    height: '320px',
+                    borderRadius: '50%',
+                    border: '6px solid rgba(255, 255, 255, 0.03)',
+                    zIndex: 1
+                }} />
 
-                    {/* Outer Audio Equalizer Bars */}
-                    <g style={{ transformOrigin: 'center', animation: isActive ? 'spin-slow 16s linear infinite' : 'none' }}>
-                        <circle cx="190" cy="190" r="174" fill="transparent" stroke="rgba(255, 255, 255, 0.25)" strokeWidth="16" strokeDasharray="6 26" strokeLinecap="round" />
-                    </g>
-                    
-                    {/* Inner DJ Vinyl Groove Ring */}
-                    <g style={{ transformOrigin: 'center', animation: isActive ? 'spin-slow-reverse 12s linear infinite' : 'none' }}>
-                        <circle cx="190" cy="190" r="105" fill="transparent" stroke="#FFE000" strokeWidth="4" strokeDasharray="2 18" strokeLinecap="round" opacity="0.6"/>
-                        <circle cx="190" cy="190" r="85" fill="transparent" stroke="#00D4F0" strokeWidth="2" strokeDasharray="10 30" opacity="0.4"/>
-                    </g>
+                {/* Music Visualizer Radial Bars */}
+                <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 2 }}>
+                    {[...Array(60)].map((_, i) => {
+                        const angle = (i / 60) * 360;
+                        const isReached = (i / 60) * 100 <= progress;
+                        return (
+                            <div 
+                                key={i} 
+                                style={{
+                                    position: 'absolute',
+                                    top: '50%',
+                                    left: '50%',
+                                    width: '6px',
+                                    height: '25px',
+                                    transformOrigin: '50% -155px',
+                                    transform: `translate(-50%, 155px) rotate(${angle}deg)`,
+                                    transition: 'all 0.3s ease'
+                                }}
+                            >
+                                <div style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    background: isReached ? `linear-gradient(to top, #ffaa00, #ff007f)` : 'rgba(255,255,255,0.03)',
+                                    borderRadius: '4px',
+                                    animation: isActive && isReached ? `dance ${0.4 + (i % 7) * 0.1}s ease-in-out infinite alternate` : 'none',
+                                    animationDelay: `${(i % 13) * 0.15}s`,
+                                    boxShadow: isReached ? '0 0 20px rgba(255,0,127,0.6)' : 'none',
+                                    transformOrigin: 'center bottom'
+                                }} />
+                            </div>
+                        );
+                    })}
+                </div>
 
-                    <g style={{ transform: 'rotate(-90deg)', transformOrigin: 'center' }}>
-                        {/* Background Track */}
-                        <circle 
-                          cx="190" cy="190" r={radius} 
-                          fill="transparent" 
-                          stroke="rgba(255,255,255,0.06)" 
-                          strokeWidth="28" 
-                        />
-                        {/* Audio Progress Fill - Segmented */}
-                        <circle 
-                          cx="190" cy="190" r={radius} 
-                          fill="transparent" 
-                          stroke="url(#revaGradient)" 
-                          strokeWidth="28" 
-                          strokeDasharray={progress === 100 ? 'none' : circumference} 
-                          strokeDashoffset={progress === 100 ? 0 : strokeDashoffset} 
-                          strokeLinecap={progress === 100 ? "square" : "round"}
-                          style={{ transition: 'stroke-dashoffset 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
-                        />
-                    </g>
-                </svg>
+                {/* Inner Rotating decorative ring */}
+                <div style={{
+                    position: 'absolute',
+                    width: '280px',
+                    height: '280px',
+                    borderRadius: '50%',
+                    border: '2px dashed rgba(255,255,255,0.1)',
+                    animation: 'spin-slow 20s linear infinite',
+                    zIndex: 1
+                }} />
+
                 <div className="percentage-text" style={{ 
-                    fontSize: '84px', 
+                    fontSize: '94px', 
                     fontWeight: 900, 
-                    letterSpacing: '-2.5px',
+                    letterSpacing: '-3px',
                     zIndex: 3,
                     color: '#ffffff',
                     textShadow: '0 10px 30px rgba(0,0,0,0.5)',
