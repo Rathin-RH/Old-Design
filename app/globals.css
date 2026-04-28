@@ -39,9 +39,10 @@ html {
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
-    width: 1338px;
-    height: 798px;
+    width: 1333px;
+    height: 794px;
     background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Temporary boundary indicator */
     overflow: hidden;
     position: relative;
     flex-shrink: 0;

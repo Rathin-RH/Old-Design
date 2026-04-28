@@ -51,7 +51,7 @@ export const SystemErrorScreen: React.FC<SystemErrorScreenProps> = ({
                     <div className="err-card-border" />
                     <div className="err-apology-content">
                         <p className="err-apology-main">{message || "We apologize for the inconvenience. Something went wrong while processing your request."}</p>
-                        <p className="err-retry-line">PLEASE TRY AGAIN OR CONTACT STAFF.</p>
+                        <p className="err-retry-line">PLEASE TRY AGAIN LATER</p>
                     </div>
                 </div>
             </div>

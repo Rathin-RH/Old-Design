@@ -16,6 +16,8 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+import ScalingWrapper from '@/components/ScalingWrapper';
+
 export default function RootLayout({
   children,
 }: {
@@ -36,8 +38,10 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="overflow-hidden overscroll-none" style={{ touchAction: 'none' }} suppressHydrationWarning>
-        {children}
+      <body className="overflow-hidden overscroll-none flex items-center justify-center min-h-screen bg-[#11001c]" style={{ touchAction: 'none' }} suppressHydrationWarning>
+        <ScalingWrapper>
+          {children}
+        </ScalingWrapper>
         <ToasterProvider />
         <ResponsiveTester />
         <Analytics />
