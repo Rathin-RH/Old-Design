@@ -71,8 +71,8 @@ export const CodeEntryScreen: React.FC<CodeEntryScreenProps> = ({
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
-            padding: '10px 20px',
-            borderRadius: '50px',
+            padding: '12px',
+            borderRadius: '50%',
             background: 'rgba(255, 255, 255, 0.08)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
@@ -85,8 +85,7 @@ export const CodeEntryScreen: React.FC<CodeEntryScreenProps> = ({
             fontFamily: 'inherit',
           }}
         >
-          <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>arrow_back</span>
-          Home
+          <span className="material-symbols-outlined" style={{ fontSize: '22px' }}>arrow_back</span>
         </button>
       )}
 
