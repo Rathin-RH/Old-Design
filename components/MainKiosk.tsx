@@ -373,7 +373,7 @@ const [failureMessage, setFailureMessage] = useState('');
 
         if (data.status === 'completed') {
           await KioskService.logActivity(KIOSK_ID, 'already_printed', { firestoreJobId });
-          showToast('Already Printed', true);
+          showToast('This code has already been used', true);
           setCode('');
           return;
         }
