@@ -301,10 +301,12 @@ const [failureMessage, setFailureMessage] = useState('');
       const status = await fetchLivePrinterStatus();
       if (!isMounted) return;
 
-      if (status === 'maintenance') {
+      // Only redirect to maintenance if currently on main interface
+      if (status === 'maintenance' && currentScreen === 'main-interface') {
         setCurrentScreen('maintenance-screen');
       }
 
+      // Only show error if actively printing and printer goes down
       if (
         currentScreen === 'printing-screen' &&
         (status === 'error' || status === 'offline' || status === 'disconnected')
@@ -314,7 +316,7 @@ const [failureMessage, setFailureMessage] = useState('');
     };
 
     checkStatus();
-    const intervalId = window.setInterval(checkStatus, 5000);
+    const intervalId = window.setInterval(checkStatus, 10000); // Check every 10s instead of 5s
 
     return () => {
       isMounted = false;
@@ -335,26 +337,7 @@ const [failureMessage, setFailureMessage] = useState('');
           enteredCode,
         });
 
-        const livePrinterStatus = await fetchLivePrinterStatus();
-
-        if (livePrinterStatus === 'maintenance') {
-          showToast('Kiosk under maintenance', true);
-          setCurrentScreen('maintenance-screen');
-          setCode('');
-          return;
-        }
-
-        if (
-          livePrinterStatus === 'disconnected' ||
-          livePrinterStatus === 'offline' ||
-          livePrinterStatus === 'error'
-        ) {
-          showToast('Printer unavailable', true);
-          setCurrentScreen('system-error-screen');
-          setCode('');
-          return;
-        }
-
+        // 1) FIRST: Validate the code against Firestore
         const q = query(collection(db, 'printJobs'), where('tokenId', '==', enteredCode));
         const querySnapshot = await getDocs(q);
 
@@ -378,6 +361,28 @@ const [failureMessage, setFailureMessage] = useState('');
           return;
         }
 
+        // 2) THEN: Check printer status only after code is validated
+        const livePrinterStatus = await fetchLivePrinterStatus();
+
+        if (livePrinterStatus === 'maintenance') {
+          showToast('Kiosk under maintenance', true);
+          setCurrentScreen('maintenance-screen');
+          setCode('');
+          return;
+        }
+
+        if (
+          livePrinterStatus === 'disconnected' ||
+          livePrinterStatus === 'offline' ||
+          livePrinterStatus === 'error'
+        ) {
+          showToast('Printer unavailable', true);
+          setCurrentScreen('system-error-screen');
+          setCode('');
+          return;
+        }
+
+        // 3) Code is valid & printer is ready — proceed with printing
         const documentUrl =
           data.documentUrl || data.url || data.fileUrl || data.downloadUrl || '';
         const fileName = data.fileName ?? data.documentName ?? 'Document.pdf';
