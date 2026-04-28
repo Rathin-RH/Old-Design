@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-const PI_BASE_URL = 'http://10.72.10.61:8000';
+const PI_BASE_URL = process.env.PI_BASE_URL || 'http://10.72.10.61:8000';
 
 export async function POST(request: NextRequest) {
   try {

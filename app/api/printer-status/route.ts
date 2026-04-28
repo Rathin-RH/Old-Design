@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-const PI_BASE_URL = 'http://10.72.10.61:8000';
+const PI_BASE_URL = process.env.PI_BASE_URL || 'http://10.72.10.61:8000';
 const PRINTER_NAME = 'Brother_HL_L5210DN_series';
 
 export async function GET() {
