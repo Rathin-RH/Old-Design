@@ -188,24 +188,80 @@ const [failureMessage, setFailureMessage] = useState('');
 
   const syncBackendJobToFirestore = useCallback(
     async (firestoreJobId: string, cupsJobId: number, pagesToPrint: number) => {
-      // Dynamic Simulated loader perfectly synchronized with physical hardware speeds
-      // Assuming laser printer speed of ~2.5 seconds per physical page.
-      const totalTime = Math.max(pagesToPrint * 2500, 5000);
-      const steps = 5;
-      const interval = totalTime / steps;
+      // Poll the Pi's real job status to match physical printer speed
+      const POLL_INTERVAL = 2000; // Check every 2 seconds
+      const MAX_POLLS = 120; // Max 4 minutes of polling
+      let polls = 0;
+      let lastProgress = 0;
 
       try {
-        for (let i = 1; i < steps; i++) {
-          await new Promise((resolve) => window.setTimeout(resolve, interval));
-          await updateDoc(doc(db, 'printJobs', firestoreJobId), {
-            progress: Math.floor((i / steps) * 100),
-            updatedAt: Timestamp.now(),
-          });
+        while (polls < MAX_POLLS) {
+          await new Promise((resolve) => window.setTimeout(resolve, POLL_INTERVAL));
+          polls++;
+
+          try {
+            const res = await fetch(`/api/job-status?jobId=${cupsJobId}`, {
+              cache: 'no-store',
+            });
+
+            if (!res.ok) {
+              // If we can't reach the status endpoint, simulate progress
+              lastProgress = Math.min(lastProgress + Math.floor(100 / (pagesToPrint * 5)), 95);
+              await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+                progress: lastProgress,
+                updatedAt: Timestamp.now(),
+              });
+              continue;
+            }
+
+            const result = await res.json();
+            const jobData = result.data;
+
+            if (!jobData) continue;
+
+            const state = (jobData.state || jobData.status || '').toString().toLowerCase();
+
+            // Map CUPS states to progress
+            if (['completed', 'done', 'success', 'finished'].some(s => state.includes(s))) {
+              await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+                status: 'completed',
+                progress: 100,
+                printedAt: Timestamp.now(),
+                updatedAt: Timestamp.now(),
+              });
+              return; // Done!
+            }
+
+            if (['failed', 'error', 'aborted', 'canceled', 'cancelled', 'stopped'].some(s => state.includes(s))) {
+              await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+                status: 'failed',
+                updatedAt: Timestamp.now(),
+              });
+              return; // Failed
+            }
+
+            // Job is still processing — estimate progress based on time elapsed
+            const estimatedTotal = pagesToPrint * 2.5; // seconds per page
+            const elapsed = polls * (POLL_INTERVAL / 1000);
+            lastProgress = Math.min(Math.floor((elapsed / estimatedTotal) * 100), 95);
+
+            await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+              progress: lastProgress,
+              updatedAt: Timestamp.now(),
+            });
+
+          } catch (pollError) {
+            console.warn('Poll error, continuing...', pollError);
+            // Keep going even if one poll fails
+            lastProgress = Math.min(lastProgress + 5, 95);
+            await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+              progress: lastProgress,
+              updatedAt: Timestamp.now(),
+            });
+          }
         }
 
-        // Final delay before completion
-        await new Promise((resolve) => window.setTimeout(resolve, interval));
-
+        // If we exhausted all polls, mark as completed (printer likely finished)
         await updateDoc(doc(db, 'printJobs', firestoreJobId), {
           status: 'completed',
           progress: 100,
@@ -213,7 +269,7 @@ const [failureMessage, setFailureMessage] = useState('');
           updatedAt: Timestamp.now(),
         });
       } catch (error) {
-        console.error('Failed to complete job in background:', error);
+        console.error('Failed to sync job status:', error);
         await updateDoc(doc(db, 'printJobs', firestoreJobId), {
           status: 'failed',
           updatedAt: Timestamp.now(),
@@ -583,6 +639,7 @@ const [failureMessage, setFailureMessage] = useState('');
         code={code}
         setCode={setCode}
         onSuccess={handleValidationSuccess}
+        onBack={handleReset}
         hasError={toastError && currentScreen === 'code-entry-screen'}
         isLoading={isValidating}
       />
