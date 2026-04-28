@@ -63,6 +63,10 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       body: formData,
       cache: 'no-store',
+      headers: {
+        'ngrok-skip-browser-warning': 'true',
+        'User-Agent': 'VPrintKiosk/1.0',
+      },
     });
 
     const contentType = piResponse.headers.get('content-type') || '';

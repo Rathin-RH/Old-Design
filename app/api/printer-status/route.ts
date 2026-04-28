@@ -9,7 +9,13 @@ export async function GET() {
   try {
     const res = await fetch(
       `${PI_BASE_URL}/printers/${encodeURIComponent(PRINTER_NAME)}/status`,
-      { cache: 'no-store' }
+      {
+        cache: 'no-store',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',
+          'User-Agent': 'VPrintKiosk/1.0',
+        },
+      }
     );
 
     if (!res.ok) {
