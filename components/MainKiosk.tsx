@@ -190,10 +190,22 @@ const [failureMessage, setFailureMessage] = useState('');
     async (firestoreJobId: string, cupsJobId: number, pagesToPrint: number) => {
       // Dynamic Simulated loader perfectly synchronized with physical hardware speeds
       // Assuming laser printer speed of ~2.5 seconds per physical page.
-      const estimatedPrintTimeMs = Math.max(pagesToPrint * 2500, 5000);
-      await new Promise((resolve) => window.setTimeout(resolve, estimatedPrintTimeMs));
+      const totalTime = Math.max(pagesToPrint * 2500, 5000);
+      const steps = 5;
+      const interval = totalTime / steps;
 
       try {
+        for (let i = 1; i < steps; i++) {
+          await new Promise((resolve) => window.setTimeout(resolve, interval));
+          await updateDoc(doc(db, 'printJobs', firestoreJobId), {
+            progress: Math.floor((i / steps) * 100),
+            updatedAt: Timestamp.now(),
+          });
+        }
+
+        // Final delay before completion
+        await new Promise((resolve) => window.setTimeout(resolve, interval));
+
         await updateDoc(doc(db, 'printJobs', firestoreJobId), {
           status: 'completed',
           progress: 100,

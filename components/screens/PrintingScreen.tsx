@@ -26,8 +26,8 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   // Sync with manualProgress if provided
   useEffect(() => {
     if (manualProgress !== undefined) {
-      setProgress(manualProgress);
       if (manualProgress >= 100 && isActive) {
+        setProgress(100); // Ensure it reaches 100% visually
         if (completionTimerRef.current) clearTimeout(completionTimerRef.current);
         completionTimerRef.current = window.setTimeout(() => {
           onComplete();
@@ -73,8 +73,8 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
        if (subIdx >= targetSub.length) clearInterval(subInterval);
     }, 30);
 
-    // Dynamic Mock Loop (only if manualProgress is not being used)
-    if (!intervalRef.current && manualProgress === undefined) {
+    // Dynamic Mock Loop: Always run visually for a smooth experience
+    if (!intervalRef.current) {
       // Laser printer estimation: ~2.5 seconds per page
       const speedPerPage = 2500; 
       const totalTime = pages * speedPerPage;
