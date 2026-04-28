@@ -223,8 +223,18 @@ const [failureMessage, setFailureMessage] = useState('');
 
             // Map CUPS states to progress
             if (['completed', 'done', 'success', 'finished'].some(s => state.includes(s))) {
-              // Physical printer buffer delay - wait 4 seconds for the paper to actually come out
-              await new Promise((resolve) => window.setTimeout(resolve, 4000));
+              // Ensure we wait at least 15 seconds total for the visual experience
+              const elapsedMs = polls * POLL_INTERVAL;
+              const minTimeMs = 15000;
+              
+              if (elapsedMs < minTimeMs) {
+                const waitTime = minTimeMs - elapsedMs;
+                await new Promise((resolve) => window.setTimeout(resolve, waitTime));
+              }
+
+              // Final physical paper buffer delay
+              await new Promise((resolve) => window.setTimeout(resolve, 2000));
+
               await updateDoc(doc(db, 'printJobs', firestoreJobId), {
                 status: 'completed',
                 progress: 100,
@@ -242,11 +252,10 @@ const [failureMessage, setFailureMessage] = useState('');
               return; // Failed
             }
 
-            // Job is still processing — estimate progress based on time elapsed
-            // Slower estimation: 6 seconds per page + 5s startup time
-            const estimatedTotal = (pagesToPrint * 6) + 5; 
+            // Job is still processing — estimate progress based on 15s target
+            const targetTime = 15; 
             const elapsed = polls * (POLL_INTERVAL / 1000);
-            lastProgress = Math.min(Math.floor((elapsed / estimatedTotal) * 100), 98);
+            lastProgress = Math.min(Math.floor((elapsed / targetTime) * 100), 98);
 
             await updateDoc(doc(db, 'printJobs', firestoreJobId), {
               progress: lastProgress,
@@ -255,8 +264,8 @@ const [failureMessage, setFailureMessage] = useState('');
 
           } catch (pollError) {
             console.warn('Poll error, continuing...', pollError);
-            // Slower fallback increment
-            lastProgress = Math.min(lastProgress + 2, 98);
+            // Fallback progress toward 15s target
+            lastProgress = Math.min(lastProgress + 7, 98);
             await updateDoc(doc(db, 'printJobs', firestoreJobId), {
               progress: lastProgress,
               updatedAt: Timestamp.now(),

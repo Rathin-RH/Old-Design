@@ -73,25 +73,29 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
        if (subIdx >= targetSub.length) clearInterval(subInterval);
     }, 30);
 
-    // Dynamic Mock Loop: Always run visually for a smooth experience
+    // Fixed 15-second loading experience
     if (!intervalRef.current) {
-      // Laser printer estimation: ~2.5 seconds per page
-      const speedPerPage = 2500; 
-      const totalTime = pages * speedPerPage;
-      const stepTime = totalTime / 100;
+      const totalTime = 15000; // Exactly 15 seconds
+      const stepTime = totalTime / 100; // 150ms per 1%
 
       intervalRef.current = window.setInterval(() => {
         setProgress((prev) => {
+          // If we have manual progress from Firestore, sync to it
+          if (manualProgress !== undefined && manualProgress > prev) {
+             return manualProgress;
+          }
+
           const next = prev + 1;
           if (next >= 100) {
              if (intervalRef.current) {
                 clearInterval(intervalRef.current);
                 intervalRef.current = null;
              }
+             // Small pause at 100% before switching screens
              completionTimerRef.current = window.setTimeout(() => {
                 onComplete();
                 completionTimerRef.current = null;
-             }, 1500);
+             }, 1000);
              return 100;
           }
           return next;
