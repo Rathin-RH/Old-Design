@@ -223,6 +223,8 @@ const [failureMessage, setFailureMessage] = useState('');
 
             // Map CUPS states to progress
             if (['completed', 'done', 'success', 'finished'].some(s => state.includes(s))) {
+              // Physical printer buffer delay - wait 4 seconds for the paper to actually come out
+              await new Promise((resolve) => window.setTimeout(resolve, 4000));
               await updateDoc(doc(db, 'printJobs', firestoreJobId), {
                 status: 'completed',
                 progress: 100,
@@ -241,9 +243,10 @@ const [failureMessage, setFailureMessage] = useState('');
             }
 
             // Job is still processing — estimate progress based on time elapsed
-            const estimatedTotal = pagesToPrint * 2.5; // seconds per page
+            // Slower estimation: 6 seconds per page + 5s startup time
+            const estimatedTotal = (pagesToPrint * 6) + 5; 
             const elapsed = polls * (POLL_INTERVAL / 1000);
-            lastProgress = Math.min(Math.floor((elapsed / estimatedTotal) * 100), 95);
+            lastProgress = Math.min(Math.floor((elapsed / estimatedTotal) * 100), 98);
 
             await updateDoc(doc(db, 'printJobs', firestoreJobId), {
               progress: lastProgress,
@@ -252,8 +255,8 @@ const [failureMessage, setFailureMessage] = useState('');
 
           } catch (pollError) {
             console.warn('Poll error, continuing...', pollError);
-            // Keep going even if one poll fails
-            lastProgress = Math.min(lastProgress + 5, 95);
+            // Slower fallback increment
+            lastProgress = Math.min(lastProgress + 2, 98);
             await updateDoc(doc(db, 'printJobs', firestoreJobId), {
               progress: lastProgress,
               updatedAt: Timestamp.now(),
