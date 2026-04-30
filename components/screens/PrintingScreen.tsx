@@ -86,17 +86,14 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
           }
 
           const next = prev + 1;
-          if (next >= 100) {
+          if (next >= 99) {
              if (intervalRef.current) {
                 clearInterval(intervalRef.current);
                 intervalRef.current = null;
              }
-             // Small pause at 100% before switching screens
-             completionTimerRef.current = window.setTimeout(() => {
-                onComplete();
-                completionTimerRef.current = null;
-             }, 1000);
-             return 100;
+             // Stop at 99%. We wait for manualProgress to reach 100% 
+             // to trigger the actual completion and screen transition.
+             return 99;
           }
           return next;
         });
