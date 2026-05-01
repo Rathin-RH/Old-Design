@@ -117,22 +117,15 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         className={`screen printing-wrap ${isActive ? 'visible' : ''}`} 
         style={{ 
             display: isActive ? 'flex' : 'none', 
-            width: '100%',
-            height: '100%',
             flexDirection: 'row', 
             alignItems: 'center', 
             justifyContent: 'center', 
             gap: '100px', 
             padding: '0 100px',
             position: 'relative',
-            overflow: 'hidden',
-            background: 'radial-gradient(circle at 10% 10%, rgba(255, 170, 0, 0.08) 0%, transparent 40%), radial-gradient(circle at 90% 90%, rgba(255, 0, 127, 0.08) 0%, transparent 40%)'
+            overflow: 'hidden'
         }}
     >
-        {/* Ambient Glow Blobs */}
-        <div style={{ position: 'absolute', top: '-10%', left: '50%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(255,170,0,0.1) 0%, transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-        <div style={{ position: 'absolute', bottom: '-10%', left: '10%', width: '500px', height: '500px', background: 'radial-gradient(circle, rgba(255,0,127,0.1) 0%, transparent 70%)', filter: 'blur(20px)', pointerEvents: 'none' }} />
-
         <style>{`
             @keyframes spin-slow {
                 100% { transform: rotate(360deg); }
@@ -142,39 +135,39 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
             }
             @keyframes pulse-ring {
                 0% { transform: scale(0.85); opacity: 0; }
-                50% { opacity: 0.6; }
+                50% { opacity: 0.8; }
                 100% { transform: scale(1.4); opacity: 0; }
             }
-            @keyframes soundwave-expand {
-                0% { transform: scale(1); opacity: 0.6; border-width: 4px; }
-                100% { transform: scale(1.6); opacity: 0; border-width: 1px; }
+            @keyframes float-page {
+                0% { transform: translate(0, 0) scale(0.6) rotate(-10deg); opacity: 0; }
+                20% { opacity: 0.9; transform: translate(40px, -15px) scale(0.7) rotate(-5deg); }
+                80% { opacity: 0.9; transform: translate(120px, -45px) scale(0.8) rotate(5deg); }
+                100% { transform: translate(160px, -60px) scale(0.5) rotate(15deg); opacity: 0; }
             }
             @keyframes text-glow-pulse {
-                0%, 100% { filter: drop-shadow(0 0 15px rgba(255,170,0,0.3)); }
-                50% { filter: drop-shadow(0 0 35px rgba(255,0,127,0.6)); }
+                0%, 100% { filter: drop-shadow(0 0 15px rgba(52,211,153,0.3)); }
+                50% { filter: drop-shadow(0 0 35px rgba(52,211,153,0.7)); }
             }
-            @keyframes dance {
-                0%, 100% { transform: scaleY(1); opacity: 0.6; }
-                50% { transform: scaleY(1.8); opacity: 1; }
-            }
-            .soundwave-ring {
+            .printing-particle {
                 position: absolute;
-                inset: -20px;
-                border: 2px solid rgba(255, 170, 0, 0.4);
-                border-radius: 50%;
-                animation: soundwave-expand 2s cubic-bezier(0.2, 0.4, 0.4, 1) infinite;
-                pointer-events: none;
-                z-index: 0;
+                width: 38px;
+                height: 48px;
+                border: 1px solid rgba(255,255,255,0.3);
+                background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%);
+                backdrop-filter: blur(4px);
+                border-radius: 6px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                animation: float-page 2.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
             }
-            .wave-2 { animation-delay: 0.6s; border-color: rgba(255, 0, 127, 0.3); }
-            .wave-3 { animation-delay: 1.2s; border-color: rgba(138, 43, 226, 0.2); }
+            .particle-2 { animation-delay: 0.8s; top: 20px; }
+            .particle-3 { animation-delay: 1.6s; top: -10px; }
             
             @keyframes data-stream {
                 0% { background-position: -200% 0; }
                 100% { background-position: 200% 0; }
             }
             .data-text-highlight {
-                background: linear-gradient(135deg, #ffffff 0%, #ffaa00 50%, #ff007f 100%);
+                background: linear-gradient(90deg, #ffffff 0%, var(--teal-bright) 30%, #ffffff 60%);
                 background-size: 200% auto;
                 color: #fff;
                 background-clip: text;
@@ -187,18 +180,10 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         {/* Left Column: Context & Greeting */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '30px', flex: 1, textAlign: 'left', maxWidth: '750px', zIndex: 10 }}>
             <div style={{ minHeight: '180px' }}>
-                <h2 style={{ 
-                    fontSize: '92px', 
-                    fontWeight: 900, 
-                    marginBottom: '20px', 
-                    letterSpacing: '-3px', 
-                    lineHeight: '1.05', 
-                    display: 'flex',
-                    textShadow: '0 10px 30px rgba(0,0,0,0.3)'
-                }}>
+                <h2 style={{ fontSize: '92px', fontWeight: 800, marginBottom: '20px', letterSpacing: '-3px', lineHeight: '1.05', display: 'flex' }}>
                     <span className={isActive ? "data-text-highlight" : ""}>{typedTitle}</span>
                 </h2>
-                <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '36px', fontWeight: 600, lineHeight: '1.4', whiteSpace: 'pre-line', textShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
+                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '36px', fontWeight: 500, lineHeight: '1.4', whiteSpace: 'pre-line' }}>
                     {typedSub}
                 </p>
             </div>
@@ -207,25 +192,25 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         {/* Right Column: Giant Progress Indicator */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             
-            {/* Soundwave concentric rings radiating from center */}
+            {/* Holographic Pages Flying In (Visual effect) */}
             {isActive && progress < 100 && (
-                <>
-                    <div className="soundwave-ring"></div>
-                    <div className="soundwave-ring wave-2"></div>
-                    <div className="soundwave-ring wave-3"></div>
-                </>
+                <div style={{ position: 'absolute', left: '-140px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
+                    <div className="printing-particle"></div>
+                    <div className="printing-particle particle-2"></div>
+                    <div className="printing-particle particle-3"></div>
+                </div>
             )}
 
-            <div className="circular-progress-container" style={{ position: 'relative', width: '420px', height: '420px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div className="circular-progress-container" style={{ position: 'relative', width: '380px', height: '380px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {/* Dynamic Glow Background */}
                 <div style={{
                     position: 'absolute',
-                    width: '320px',
-                    height: '320px',
+                    width: '300px',
+                    height: '300px',
                     borderRadius: '50%',
-                    background: 'radial-gradient(circle, #ffaa00 0%, #ff007f 100%)',
-                    filter: 'blur(20px)',
-                    opacity: 0.1 + (progress / 100) * 0.4,
+                    background: 'var(--teal)',
+                    filter: 'blur(70px)',
+                    opacity: 0.15 + (progress / 100) * 0.45,
                     transition: 'opacity 0.3s',
                 }} />
                 
@@ -233,71 +218,59 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 {isActive && progress < 100 && (
                     <>
                         <div style={{
-                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(255, 170, 0, 0.4)',
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.5)',
                             animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite', pointerEvents: 'none'
+                        }}></div>
+                        <div style={{
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.2)',
+                            animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite 1.5s', pointerEvents: 'none'
                         }}></div>
                     </>
                 )}
 
-                {/* Background Track for the radial bars */}
-                <div style={{
-                    position: 'absolute',
-                    width: '320px',
-                    height: '320px',
-                    borderRadius: '50%',
-                    border: '6px solid rgba(255, 255, 255, 0.03)',
-                    zIndex: 1
-                }} />
+                <svg width="380" height="380" style={{ position: 'absolute', zIndex: 2 }}>
+                    <defs>
+                        <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="var(--teal-bright)" />
+                            <stop offset="100%" stopColor="#10b981" />
+                        </linearGradient>
+                    </defs>
 
-                {/* Music Visualizer Radial Bars */}
-                <div style={{ position: 'absolute', width: '100%', height: '100%', zIndex: 2 }}>
-                    {[...Array(60)].map((_, i) => {
-                        const angle = (i / 60) * 360;
-                        const isReached = (i / 60) * 100 <= progress;
-                        return (
-                            <div 
-                                key={i} 
-                                style={{
-                                    position: 'absolute',
-                                    top: '50%',
-                                    left: '50%',
-                                    width: '6px',
-                                    height: '25px',
-                                    transformOrigin: '50% -155px',
-                                    transform: `translate(-50%, 155px) rotate(${angle}deg)`,
-                                    transition: 'all 0.3s ease'
-                                }}
-                            >
-                                <div style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    background: isReached ? `linear-gradient(to top, #ffaa00, #ff007f)` : 'rgba(255,255,255,0.03)',
-                                    borderRadius: '4px',
-                                    animation: isActive && isReached ? `dance ${0.4 + (i % 7) * 0.1}s ease-in-out infinite alternate` : 'none',
-                                    animationDelay: `${(i % 13) * 0.15}s`,
-                                    boxShadow: isReached ? '0 0 20px rgba(255,0,127,0.6)' : 'none',
-                                    transformOrigin: 'center bottom'
-                                }} />
-                            </div>
-                        );
-                    })}
-                </div>
+                    {/* Outer Dashed Rotating Ring */}
+                    <g style={{ transformOrigin: 'center', animation: isActive ? 'spin-slow 24s linear infinite' : 'none' }}>
+                        <circle cx="190" cy="190" r="176" fill="transparent" stroke="rgba(255,255,255,0.08)" strokeWidth="3" strokeDasharray="12 18" />
+                    </g>
+                    
+                    {/* Inner Dotted Rotating Ring */}
+                    <g style={{ transformOrigin: 'center', animation: isActive ? 'spin-slow-reverse 18s linear infinite' : 'none' }}>
+                        <circle cx="190" cy="190" r="105" fill="transparent" stroke="rgba(255,255,255,0.15)" strokeWidth="5" strokeDasharray="2 14" strokeLinecap="round" />
+                    </g>
 
-                {/* Inner Rotating decorative ring */}
-                <div style={{
-                    position: 'absolute',
-                    width: '280px',
-                    height: '280px',
-                    borderRadius: '50%',
-                    border: '2px dashed rgba(255,255,255,0.1)',
-                    animation: 'spin-slow 20s linear infinite',
-                    zIndex: 1
-                }} />
-
+                    <g style={{ transform: 'rotate(-90deg)', transformOrigin: 'center' }}>
+                        {/* Background Track */}
+                        <circle 
+                          cx="190" cy="190" r={radius} 
+                          fill="transparent" 
+                          stroke="rgba(255,255,255,0.06)" 
+                          strokeWidth="24" 
+                        />
+                        {/* Progress Fill */}
+                        <circle 
+                          cx="190" cy="190" r={radius} 
+                          fill="transparent" 
+                          stroke="url(#progressGradient)" 
+                          strokeWidth="24" 
+                          strokeDasharray={progress === 100 ? 'none' : circumference} 
+                          strokeDashoffset={progress === 100 ? 0 : strokeDashoffset} 
+                          strokeLinecap={progress === 100 ? "square" : "round"}
+                          style={{ transition: 'stroke-dashoffset 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+                        />
+                    </g>
+                </svg>
                 <div className="percentage-text" style={{ 
-                    fontSize: '94px', 
+                    fontSize: '84px', 
                     fontWeight: 900, 
-                    letterSpacing: '-3px',
+                    letterSpacing: '-2.5px',
                     zIndex: 3,
                     color: '#ffffff',
                     textShadow: '0 10px 30px rgba(0,0,0,0.5)',
