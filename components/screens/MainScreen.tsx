@@ -119,43 +119,16 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
                         <p className="tag-line">— WELCOME TO —</p>
                     </div>
                     <div className="main-heading">
-                        <svg width="680" height="175" viewBox="0 0 680 175" style={{ overflow: 'visible', filter: 'drop-shadow(0 10px 25px rgba(0,0,0,0.45))' }}>
-                            <defs>
-                                <style>{`@import url('https://fonts.cdnfonts.com/css/lovelo');`}</style>
-                                <linearGradient id="mimoGrad" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="0%" stopColor="#ffffff" stopOpacity="1" />
-                                    <stop offset="100%" stopColor="#ffffff" stopOpacity="0.7" />
-                                </linearGradient>
-                            </defs>
-                            <text 
-                                x="50%" y="52%" 
-                                dominantBaseline="middle" 
-                                textAnchor="middle" 
-                                fill="url(#mimoGrad)" 
-                                stroke="rgba(255,255,255,0.3)" 
-                                strokeWidth="1.5"
-                                strokeLinejoin="bevel"
-                                strokeLinecap="butt"
-                                style={{ 
-                                    fontFamily: "'Lovelo', sans-serif", 
-                                    fontSize: '158px', 
-                                    fontWeight: 900,
-                                    letterSpacing: '12px',
-                                    paintOrder: 'stroke fill'
-                                }}
-                            >
-                                MIMO
-                            </text>
-                        </svg>
+                        <DynamicLogo forceTheme="eco" />
                     </div>
-                    <div className="sub-heading-wrap">
+                    <div className="sub-heading-wrap" style={{ marginTop: '-25px' }}>
                         <h2 className="sub-heading">Self-Service <span className="cyan-text">Printing Kiosk</span></h2>
                     </div>
-                    <p className="brand-desc">Fast, secure document printing via Mimo code.</p>
+                    <p className="brand-desc" style={{ transform: 'translateY(-11px)' }}>Fast, secure document printing via Mimo code.</p>
                 </section>
                 
                 {/* HORIZONTAL SWIPE TRACK: Positioned via flex flow */}
-                <section className="action-panel" style={{ transform: 'translateY(-15px)' }}>
+                <section className="action-panel" style={{ transform: 'translateY(-41px)' }}>
                     <div 
                         className={`swipe-track-glass ${isUnlocked ? 'unlocked' : ''}`} 
                         ref={trackRef}

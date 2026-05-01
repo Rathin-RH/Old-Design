@@ -1,17 +1,22 @@
 import React from 'react';
+import { EcoMimoDoodle } from './doodles/EcoMimoDoodle';
 import { RevaUtsavDoodle } from './doodles/RevaUtsavDoodle';
 
-type DoodleTheme = 'default' | 'reva-utsav';
+type DoodleTheme = 'default' | 'reva-utsav' | 'eco';
 
 interface DynamicLogoProps {
     forceTheme?: DoodleTheme; 
 }
 
 export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
-    const activeTheme: DoodleTheme = forceTheme || 'reva-utsav';
+    const activeTheme: DoodleTheme = forceTheme || 'eco';
 
     if (activeTheme === 'reva-utsav') {
         return <RevaUtsavDoodle />;
+    }
+
+    if (activeTheme === 'eco') {
+        return <EcoMimoDoodle />;
     }
 
     return (
