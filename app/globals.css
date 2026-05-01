@@ -12,11 +12,11 @@
 }
 
 :root {
-    --brand-deep: #11001c;
-    --brand-mid: #4a0033;
-    --brand-lt: #800040;
-    --teal: #ffaa00;
-    --teal-bright: #ffcc00;
+    --brand-deep: #0e457e;
+    --brand-mid: #1664c0;
+    --brand-lt: #1e87e5;
+    --teal: #26c6da;
+    --teal-bright: #4fc3f7;
     --glass: rgba(255, 255, 255, 0.08);
     --glass-border: rgba(255, 255, 255, 0.25);
     --white-core: #ffffff;
@@ -42,7 +42,6 @@ body {
     width: 1333px;
     height: 794px;
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Temporary boundary indicator */
     overflow: hidden;
     position: relative;
     flex-shrink: 0;
@@ -83,8 +82,8 @@ body {
     padding: 8px 18px;
     border-radius: 100px;
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.3);
     font-size: 12px;
     font-weight: 700;
@@ -125,15 +124,14 @@ body {
     height: 800px;
     background: radial-gradient(circle, rgba(79, 195, 247, 0.15) 0%, transparent 60%);
     border-radius: 50%;
-    /* Reduced blur for performance on 4GB devices */
-    filter: blur(20px);
+    filter: blur(100px);
     mix-blend-mode: screen;
     animation: drift 25s infinite alternate ease-in-out;
 }
 
-.glow-1 { top: -20%; left: -10%; background: radial-gradient(circle, rgba(255, 0, 127, 0.3) 0%, transparent 60%); animation-delay: 0s; }
-.glow-2 { bottom: -20%; right: -10%; background: radial-gradient(circle, rgba(255, 170, 0, 0.3) 0%, transparent 60%); animation-delay: -5s; }
-.glow-3 { top: 40%; left: 40%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(138, 43, 226, 0.3) 0%, transparent 60%); animation-delay: -10s; }
+.glow-1 { top: -20%; left: -10%; background: radial-gradient(circle, rgba(38, 198, 218, 0.2) 0%, transparent 60%); animation-delay: 0s; }
+.glow-2 { bottom: -20%; right: -10%; background: radial-gradient(circle, rgba(14, 69, 126, 0.4) 0%, transparent 60%); animation-delay: -5s; }
+.glow-3 { top: 40%; left: 40%; width: 600px; height: 600px; background: radial-gradient(circle, rgba(30, 135, 229, 0.25) 0%, transparent 60%); animation-delay: -10s; }
 
 @keyframes drift {
     0% { transform: translate(0, 0) scale(1) rotate(0deg); }
@@ -268,7 +266,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
     /* Removed bounce animation for efficiency */
     box-shadow: 0 0 30px rgba(38, 198, 218, 0.2);
     will-change: transform;
@@ -381,8 +379,8 @@ body {
     max-width: 800px;
     height: 120px;
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(50px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 60px;
     box-shadow: 
@@ -577,8 +575,8 @@ body {
     max-width: 84px;
     border-radius: 24px;
     background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 
         0 15px 35px rgba(0, 0, 0, 0.3),
@@ -814,20 +812,20 @@ body {
 
 @keyframes success-pulse {
     0%,
-    100% { box-shadow: 0 0 0 0 rgba(255, 170, 0, 0.25); }
-    50% { box-shadow: 0 0 0 16px rgba(255, 170, 0, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.25); }
+    50% { box-shadow: 0 0 0 16px rgba(16, 185, 129, 0); }
 }
 
 .success-check {
     font-size: 50px;
-    color: #ffaa00;
+    color: #34d399;
 }
 
 .summary-label {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.18em;
-    color: #ffaa00;
+    color: #34d399;
     text-transform: uppercase;
     margin-bottom: 10px;
 }
@@ -844,8 +842,8 @@ body {
     width: 100%;
     max-width: 860px;
     background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 28px;
     overflow: hidden;
@@ -1082,27 +1080,3 @@ body {
     50% { transform: translateY(-10px); }
 }
 
-/* ---- REVOTHSAVA DOODLE SYSTEM ---- */
-.animated-gradient {
-    animation: gradientSweep 8s linear infinite alternate;
-}
-
-@keyframes gradientSweep {
-    0% { stop-color: #ff007f; }
-    33% { stop-color: #ffaa00; }
-    66% { stop-color: #8a2be2; }
-    100% { stop-color: #ff007f; }
-}
-
-.utsav-doodle-svg {
-    transform-origin: center center;
-}
-
-.utsav-subtitle {
-    animation: neonBlink 4s infinite alternate;
-}
-
-@keyframes neonBlink {
-    0%, 100% { opacity: 0.9; text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f; }
-    50% { opacity: 0.7; text-shadow: 0 0 5px #ffaa00; }
-}

@@ -38,7 +38,7 @@ export default function RootLayout({
         />
       </head>
 
-      <body className="overflow-hidden overscroll-none flex items-center justify-center min-h-screen bg-[#11001c]" style={{ touchAction: 'none' }} suppressHydrationWarning>
+      <body className="overflow-hidden overscroll-none flex items-center justify-center min-h-screen" style={{ touchAction: 'none' }} suppressHydrationWarning>
         <ScalingWrapper>
           {children}
         </ScalingWrapper>
