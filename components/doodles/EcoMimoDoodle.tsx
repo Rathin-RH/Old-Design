@@ -86,9 +86,9 @@ export const EcoMimoDoodle: React.FC = () => {
 
                 .floating-leaf {
                     position: absolute;
-                    animation: float-leaf 8s ease-in-out infinite;
+                    animation: float-leaf 8s ease-in-out infinite alternate;
                     z-index: 5;
-                    will-change: transform, opacity;
+                    will-change: transform;
                 }
 
                 .sparkle {
@@ -109,10 +109,8 @@ export const EcoMimoDoodle: React.FC = () => {
                 }
 
                 @keyframes float-leaf {
-                    0% { transform: translateY(0px) rotate(0deg) translateX(0px); opacity: 0; }
-                    20% { opacity: 1; }
-                    80% { opacity: 1; }
-                    100% { transform: translateY(-60px) rotate(45deg) translateX(30px); opacity: 0; }
+                    0% { transform: translateY(0px) rotate(0deg) translateX(0px); }
+                    100% { transform: translateY(-40px) rotate(20deg) translateX(15px); }
                 }
 
                 @keyframes twinkle {
@@ -155,62 +153,25 @@ export const EcoMimoDoodle: React.FC = () => {
                 {/* 3D Clay Text for MIM */}
                 <div className="mim-wrapper">
                     <div className="eco-text-base">
-                        <span>M</span><span>I</span><span style={{ marginLeft: '20px' }}>M</span>
+                        <span>M</span><span style={{ marginLeft: '2px' }}>I</span><span style={{ marginLeft: '18px' }}>M</span>
                     </div>
                     <div className="eco-text-mid">
-                        <span>M</span><span>I</span><span style={{ marginLeft: '20px' }}>M</span>
+                        <span>M</span><span style={{ marginLeft: '2px' }}>I</span><span style={{ marginLeft: '18px' }}>M</span>
                     </div>
                     <div className="eco-text-top">
-                        <span>M</span><span>I</span><span style={{ marginLeft: '20px' }}>M</span>
+                        <span>M</span><span style={{ marginLeft: '2px' }}>I</span><span style={{ marginLeft: '18px' }}>M</span>
                     </div>
                     <div className="eco-text-texture">
-                        <span>M</span><span>I</span><span style={{ marginLeft: '20px' }}>M</span>
+                        <span>M</span><span style={{ marginLeft: '2px' }}>I</span><span style={{ marginLeft: '18px' }}>M</span>
                     </div>
                     
                     {/* Vines and Leaves Intertwined */}
                     {/* Sleek Elegant Vines (Bails) */}
                     
-                    {/* Left M Vine */}
-                    <svg className="vine" style={{ left: '-5px', top: '15px' }} width="100" height="180" viewBox="0 0 100 180" fill="none">
-                        {/* Stem Shadow */}
-                        <path d="M 60 0 Q 20 60 60 120 T 40 180" stroke="rgba(0,0,0,0.2)" strokeWidth="4" strokeLinecap="round" fill="none" transform="translate(3, 4)" />
-                        {/* Stem */}
-                        <path d="M 60 0 Q 20 60 60 120 T 40 180" stroke="#15803d" strokeWidth="4" strokeLinecap="round" fill="none" />
-                        
-                        {/* Perfect Teardrop Leaves */}
-                        <g transform="translate(45, 40) rotate(-60) scale(0.7)">
-                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
-                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
-                        </g>
-                        <g transform="translate(52, 90) rotate(45) scale(0.7)">
-                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
-                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
-                        </g>
-                        <g transform="translate(48, 145) rotate(-45) scale(0.7)">
-                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
-                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
-                        </g>
-                    </svg>
-
-                    {/* Center I Vine */}
-                    <svg className="vine" style={{ left: '195px', top: '55px', zIndex: 15 }} width="80" height="120" viewBox="0 0 80 120" fill="none">
-                        <path d="M 30 0 Q 60 40 30 80 T 40 120" stroke="rgba(0,0,0,0.2)" strokeWidth="4" strokeLinecap="round" fill="none" transform="translate(2, 4)" />
-                        <path d="M 30 0 Q 60 40 30 80 T 40 120" stroke="#15803d" strokeWidth="4" strokeLinecap="round" fill="none" />
-                        
-                        <g transform="translate(45, 25) rotate(60) scale(0.7)">
-                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
-                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
-                        </g>
-                        <g transform="translate(32, 65) rotate(-50) scale(0.7)">
-                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
-                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
-                        </g>
-                    </svg>
-
-                    {/* Right M Vine */}
-                    <svg className="vine" style={{ right: '-10px', top: '35px' }} width="80" height="160" viewBox="0 0 80 160" fill="none">
-                        <path d="M 30 0 Q 70 50 40 100 T 50 160" stroke="rgba(0,0,0,0.2)" strokeWidth="4" strokeLinecap="round" fill="none" transform="translate(3, 4)" />
-                        <path d="M 30 0 Q 70 50 40 100 T 50 160" stroke="#15803d" strokeWidth="4" strokeLinecap="round" fill="none" />
+                    {/* Left M Vine (Mirrored from Right M) */}
+                    <svg className="vine" style={{ left: '-10px', top: '35px', transform: 'scaleX(-1)' }} width="80" height="150" viewBox="0 0 80 150" fill="none">
+                        <path d="M 30 0 Q 70 50 40 100 Q 20 120 40 135" stroke="rgba(0,0,0,0.2)" strokeWidth="4" strokeLinecap="round" fill="none" transform="translate(-3, 4)" />
+                        <path d="M 30 0 Q 70 50 40 100 Q 20 120 40 135" stroke="#15803d" strokeWidth="4" strokeLinecap="round" fill="none" />
                         
                         <g transform="translate(48, 35) rotate(50) scale(0.7)">
                             <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
@@ -220,30 +181,43 @@ export const EcoMimoDoodle: React.FC = () => {
                             <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
                             <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
                         </g>
-                        <g transform="translate(43, 135) rotate(40) scale(0.7)">
+                        <g transform="translate(40, 135) rotate(40) scale(0.7)">
                             <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
                             <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
                         </g>
                     </svg>
 
+                    {/* Right M Vine */}
+                    <svg className="vine" style={{ right: '-10px', top: '35px' }} width="80" height="150" viewBox="0 0 80 150" fill="none">
+                        <path d="M 30 0 Q 70 50 40 100 Q 20 120 40 135" stroke="rgba(0,0,0,0.2)" strokeWidth="4" strokeLinecap="round" fill="none" transform="translate(3, 4)" />
+                        <path d="M 30 0 Q 70 50 40 100 Q 20 120 40 135" stroke="#15803d" strokeWidth="4" strokeLinecap="round" fill="none" />
+                        
+                        <g transform="translate(48, 35) rotate(50) scale(0.7)">
+                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
+                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
+                        </g>
+                        <g transform="translate(46, 85) rotate(-60) scale(0.7)">
+                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
+                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
+                        </g>
+                        <g transform="translate(40, 135) rotate(40) scale(0.7)">
+                            <path d="M 0 0 C -15 -15, -15 -30, 0 -30 C 15 -30, 15 -15, 0 0 Z" fill="#4ade80" stroke="#166534" strokeWidth="2" />
+                            <line x1="0" y1="0" x2="0" y2="-20" stroke="#166534" strokeWidth="2" />
+                        </g>
+                    </svg>
+
+
+
                     {/* 3D Pink Flowers (like in the image) */}
-                    <svg className="flower" style={{ left: '50px', top: '-10px' }} width="45" height="45" viewBox="0 0 100 100">
-                        <circle cx="50" cy="20" r="20" fill="#f472b6" />
-                        <circle cx="80" cy="50" r="20" fill="#ec4899" />
-                        <circle cx="50" cy="80" r="20" fill="#db2777" />
-                        <circle cx="20" cy="50" r="20" fill="#ec4899" />
-                        <circle cx="50" cy="50" r="15" fill="#fcd34d" stroke="#d97706" strokeWidth="3" />
+                    <svg className="flower" style={{ left: '28px', top: '20px', animationDelay: '0s' }} width="50" height="50" viewBox="0 0 100 100">
+                        <circle cx="50" cy="20" r="20" fill="#fb7185" />
+                        <circle cx="80" cy="50" r="20" fill="#f43f5e" />
+                        <circle cx="50" cy="80" r="20" fill="#e11d48" />
+                        <circle cx="20" cy="50" r="20" fill="#f43f5e" />
+                        <circle cx="50" cy="50" r="15" fill="#fbbf24" stroke="#b45309" strokeWidth="3" />
                     </svg>
 
-                    <svg className="flower" style={{ left: '200px', bottom: '10px', animationDelay: '0.8s', transform: 'scale(0.7)' }} width="35" height="35" viewBox="0 0 100 100">
-                        <circle cx="50" cy="20" r="20" fill="#f472b6" />
-                        <circle cx="80" cy="50" r="20" fill="#ec4899" />
-                        <circle cx="50" cy="80" r="20" fill="#db2777" />
-                        <circle cx="20" cy="50" r="20" fill="#ec4899" />
-                        <circle cx="50" cy="50" r="15" fill="#fcd34d" />
-                    </svg>
-
-                    <svg className="flower" style={{ right: '40px', top: '20px', animationDelay: '1.2s' }} width="50" height="50" viewBox="0 0 100 100">
+                    <svg className="flower" style={{ right: '28px', top: '20px', animationDelay: '1.2s' }} width="50" height="50" viewBox="0 0 100 100">
                         <circle cx="50" cy="20" r="20" fill="#fb7185" />
                         <circle cx="80" cy="50" r="20" fill="#f43f5e" />
                         <circle cx="50" cy="80" r="20" fill="#e11d48" />
