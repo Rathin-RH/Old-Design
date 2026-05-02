@@ -27,6 +27,10 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   useEffect(() => {
     if (manualProgress !== undefined) {
       if (manualProgress >= 100 && isActive) {
+        if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+        }
         setProgress(100); // Ensure it reaches 100% visually
         if (completionTimerRef.current) clearTimeout(completionTimerRef.current);
         completionTimerRef.current = window.setTimeout(() => {
@@ -80,6 +84,13 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
 
       intervalRef.current = window.setInterval(() => {
         setProgress((prev) => {
+          if (prev >= 100) {
+             if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+             }
+             return 100;
+          }
           // If we have manual progress from Firestore, sync to it
           if (manualProgress !== undefined && manualProgress > prev) {
              return manualProgress;
