@@ -219,10 +219,10 @@ const [failureMessage, setFailureMessage] = useState('');
 
             if (!jobData) continue;
 
-            const state = (jobData.state || jobData.status || '').toString().toLowerCase();
+            const state = String(jobData.state || jobData.status || '').toLowerCase().trim();
 
-            // Map CUPS states to progress
-            if (['completed', 'done', 'success', 'finished'].some(s => state.includes(s))) {
+            // Map CUPS states to progress (CUPS returns 9 for completed)
+            if (['completed', 'done', 'success', 'finished', '9'].some(s => state === s || state.includes(s))) {
               await updateDoc(doc(db, 'printJobs', firestoreJobId), {
                 status: 'completed',
                 progress: 100,
@@ -232,7 +232,8 @@ const [failureMessage, setFailureMessage] = useState('');
               return; // Done!
             }
 
-            if (['failed', 'error', 'aborted', 'canceled', 'cancelled', 'stopped'].some(s => state.includes(s))) {
+            // CUPS states: 6=stopped, 7=canceled, 8=aborted
+            if (['failed', 'error', 'aborted', 'canceled', 'cancelled', 'stopped', '6', '7', '8'].some(s => state === s || state.includes(s))) {
               await updateDoc(doc(db, 'printJobs', firestoreJobId), {
                 status: 'failed',
                 updatedAt: Timestamp.now(),
