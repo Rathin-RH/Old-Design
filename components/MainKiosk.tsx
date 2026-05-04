@@ -223,18 +223,6 @@ const [failureMessage, setFailureMessage] = useState('');
 
             // Map CUPS states to progress
             if (['completed', 'done', 'success', 'finished'].some(s => state.includes(s))) {
-              // Ensure we wait at least 15 seconds total for the visual experience
-              const elapsedMs = polls * POLL_INTERVAL;
-              const minTimeMs = 15000;
-              
-              if (elapsedMs < minTimeMs) {
-                const waitTime = minTimeMs - elapsedMs;
-                await new Promise((resolve) => window.setTimeout(resolve, waitTime));
-              }
-
-              // Final physical paper buffer delay
-              await new Promise((resolve) => window.setTimeout(resolve, 2000));
-
               await updateDoc(doc(db, 'printJobs', firestoreJobId), {
                 status: 'completed',
                 progress: 100,
