@@ -138,55 +138,85 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         }}
     >
         <style>{`
-            @keyframes spin-slow {
-                100% { transform: rotate(360deg); }
-            }
-            @keyframes spin-slow-reverse {
-                100% { transform: rotate(-360deg); }
-            }
+            @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+            @keyframes spin-slow-reverse { 100% { transform: rotate(-360deg); } }
             @keyframes pulse-ring {
                 0% { transform: scale(0.85); opacity: 0; }
-                50% { opacity: 0.8; }
+                50% { opacity: 0.55; }
                 100% { transform: scale(1.4); opacity: 0; }
             }
-            @keyframes float-page {
-                0% { transform: translate(0, 0) scale(0.6) rotate(-10deg); opacity: 0; }
-                20% { opacity: 0.9; transform: translate(40px, -15px) scale(0.7) rotate(-5deg); }
-                80% { opacity: 0.9; transform: translate(120px, -45px) scale(0.8) rotate(5deg); }
-                100% { transform: translate(160px, -60px) scale(0.5) rotate(15deg); opacity: 0; }
+            @keyframes float-motif {
+                0%   { transform: translate(0,0) scale(0.5) rotate(-15deg); opacity: 0; }
+                15%  { opacity: 1; }
+                80%  { opacity: 0.9; transform: translate(130px,-55px) scale(0.85) rotate(10deg); }
+                100% { transform: translate(170px,-75px) scale(0.35) rotate(20deg); opacity: 0; }
+            }
+            @keyframes bg-float {
+                0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.07; }
+                50%       { transform: translateY(-16px) rotate(12deg); opacity: 0.13; }
             }
             @keyframes text-glow-pulse {
-                0%, 100% { filter: drop-shadow(0 0 15px rgba(52,211,153,0.3)); }
-                50% { filter: drop-shadow(0 0 35px rgba(52,211,153,0.7)); }
+                0%, 100% { filter: drop-shadow(0 0 12px rgba(255,105,150,0.35)); }
+                50%       { filter: drop-shadow(0 0 28px rgba(255,105,150,0.75)); }
+            }
+            @keyframes data-stream {
+                0%   { background-position: -200% 0; }
+                100% { background-position:  200% 0; }
             }
             .printing-particle {
                 position: absolute;
-                width: 38px;
-                height: 48px;
-                border: 1px solid rgba(255,255,255,0.3);
-                background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%);
-                backdrop-filter: blur(4px);
-                border-radius: 6px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                animation: float-page 2.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+                filter: drop-shadow(0 2px 8px rgba(0,0,0,0.2));
+                animation: float-motif 2.6s cubic-bezier(0.25, 1, 0.5, 1) infinite;
             }
-            .particle-2 { animation-delay: 0.8s; top: 20px; }
-            .particle-3 { animation-delay: 1.6s; top: -10px; }
-            
-            @keyframes data-stream {
-                0% { background-position: -200% 0; }
-                100% { background-position: 200% 0; }
-            }
+            .p-heart  { width: 36px; height: 36px; }
+            .p-flower { width: 44px; height: 44px; }
+            .particle-2 { animation-delay: 0.9s;  top: 22px; }
+            .particle-3 { animation-delay: 1.75s; top: -14px; }
+            .bg-motif { position: absolute; pointer-events: none; animation: bg-float 6s ease-in-out infinite; }
             .data-text-highlight {
-                background: linear-gradient(90deg, #ffffff 0%, var(--teal-bright) 30%, #ffffff 60%);
+                background: linear-gradient(90deg, #ffffff 0%, #ff80ab 30%, #ffffff 60%);
                 background-size: 200% auto;
-                color: #fff;
                 background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 animation: data-stream 3s linear infinite;
             }
+            .love-tagline {
+                font-family: 'Dancing Script', cursive;
+                font-size: 34px;
+                font-weight: 700;
+                color: #ffffff;
+                text-shadow:
+                    0 0 12px rgba(255, 128, 171, 0.9),
+                    0 0 28px rgba(255, 128, 171, 0.6),
+                    0 2px 4px rgba(0, 0, 0, 0.4);
+                animation: data-stream 4s linear infinite;
+                margin-top: 12px;
+                letter-spacing: 1.5px;
+                display: block;
+            }
         `}</style>
+
+        {/* Scattered background flowers & hearts */}
+        {isActive && (
+            <>
+                <div className="bg-motif" style={{ top: '6%', left: '3%', width: 50, height: 50, animationDelay: '0s' }}>
+                    <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="9" fill="#FFD700"/>{[0,60,120,180,240,300].map((d,i)=><ellipse key={i} cx="32" cy="14" rx="7" ry="12" fill="#ffb3c6" opacity="0.85" transform={`rotate(${d} 32 32)`}/>)}</svg>
+                </div>
+                <div className="bg-motif" style={{ top: '5%', right: '4%', width: 36, height: 36, animationDelay: '1.5s' }}>
+                    <svg viewBox="0 0 24 24" fill="#ff80ab"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+                <div className="bg-motif" style={{ bottom: '8%', left: '5%', width: 30, height: 30, animationDelay: '2.5s' }}>
+                    <svg viewBox="0 0 24 24" fill="#c084fc"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+                <div className="bg-motif" style={{ bottom: '9%', right: '3%', width: 46, height: 46, animationDelay: '3.5s' }}>
+                    <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="9" fill="#FFD700"/>{[0,60,120,180,240,300].map((d,i)=><ellipse key={i} cx="32" cy="14" rx="6" ry="11" fill="#c084fc" opacity="0.85" transform={`rotate(${d} 32 32)`}/>)}</svg>
+                </div>
+                <div className="bg-motif" style={{ top: '45%', left: '1.5%', width: 26, height: 26, animationDelay: '4s' }}>
+                    <svg viewBox="0 0 24 24" fill="#ff80ab"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                </div>
+            </>
+        )}
 
         {/* Left Column: Context & Greeting */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '30px', flex: 1, textAlign: 'left', maxWidth: '750px', zIndex: 10 }}>
@@ -197,18 +227,25 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '36px', fontWeight: 500, lineHeight: '1.4', whiteSpace: 'pre-line' }}>
                     {typedSub}
                 </p>
+                {isActive && <p className="love-tagline">🌸 Printing with Love & Care🌸</p>}
             </div>
         </div>
 
         {/* Right Column: Giant Progress Indicator */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-            
-            {/* Holographic Pages Flying In (Visual effect) */}
+
+            {/* Flying Hearts & Flowers toward the ring */}
             {isActive && progress < 100 && (
                 <div style={{ position: 'absolute', left: '-140px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
-                    <div className="printing-particle"></div>
-                    <div className="printing-particle particle-2"></div>
-                    <div className="printing-particle particle-3"></div>
+                    <div className="printing-particle p-heart">
+                        <svg viewBox="0 0 24 24" fill="#ff80ab"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <div className="printing-particle p-flower particle-2">
+                        <svg viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="9" fill="#FFD700"/>{[0,60,120,180,240,300].map((d,i)=><ellipse key={i} cx="32" cy="14" rx="7" ry="12" fill="#ffb3c6" opacity="0.9" transform={`rotate(${d} 32 32)`}/>)}</svg>
+                    </div>
+                    <div className="printing-particle p-heart particle-3">
+                        <svg viewBox="0 0 24 24" fill="#c084fc"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
                 </div>
             )}
 
@@ -219,9 +256,9 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                     width: '300px',
                     height: '300px',
                     borderRadius: '50%',
-                    background: 'var(--teal)',
-                    filter: 'blur(70px)',
-                    opacity: 0.15 + (progress / 100) * 0.45,
+                    background: 'radial-gradient(circle, #ff80ab 0%, #c084fc 100%)',
+                    filter: 'blur(65px)',
+                    opacity: 0.12 + (progress / 100) * 0.28,
                     transition: 'opacity 0.3s',
                 }} />
                 
@@ -229,11 +266,11 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 {isActive && progress < 100 && (
                     <>
                         <div style={{
-                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.5)',
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(255,128,171,0.45)',
                             animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite', pointerEvents: 'none'
                         }}></div>
                         <div style={{
-                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.2)',
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(192,132,252,0.35)',
                             animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite 1.5s', pointerEvents: 'none'
                         }}></div>
                     </>
@@ -242,8 +279,9 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 <svg width="380" height="380" style={{ position: 'absolute', zIndex: 2 }}>
                     <defs>
                         <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="var(--teal-bright)" />
-                            <stop offset="100%" stopColor="#10b981" />
+                            <stop offset="0%" stopColor="#ff80ab" />
+                            <stop offset="50%" stopColor="#c084fc" />
+                            <stop offset="100%" stopColor="#ffb3c6" />
                         </linearGradient>
                     </defs>
 
