@@ -35,13 +35,13 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
                 }
                 .animate-heartbeat-text {
                     animation: heartbeatPulse 3s ease-in-out infinite;
-                    transform-origin: 562px 107.2px;
+                    transform-origin: 572px 107.2px;
                 }
             `}</style>
             <svg
-                width="680"
+                width="760"
                 height="200"
-                viewBox="0 0 680 200"
+                viewBox="0 0 760 200"
                 style={{ overflow: 'visible' }}
             >
                 <defs>
@@ -141,14 +141,14 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
                     </g>
 
                     {/* Heart shadow layer */}
-                    <g id="heartO" transform="translate(472, 16) scale(7.5)">
+                    <g id="heartO" transform="translate(482, 16) scale(7.5)">
                         <g className="animate-heartbeat-internal">
                             <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                         </g>
                     </g>
 
                     {/* Heart colored layer with glossy highlight */}
-                    <g id="heartO_colored" transform="translate(472, 16) scale(7.5)">
+                    <g id="heartO_colored" transform="translate(482, 16) scale(7.5)">
                         <g className="animate-heartbeat-internal">
                             <path fill="url(#heartGrad)" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                             <path fill="rgba(255,255,255,0.6)" d="M 4.5 8 C 4.5 5 6.5 3 8.5 3 C 6.5 4 5.5 6 5.5 8 C 5.5 9 6 10 6.5 10.5 C 5 9.5 4.5 8.5 4.5 8 Z" />
@@ -157,7 +157,7 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
                 </defs>
 
                 {/* Main MIMO Wordmark Group - Scaled down 80% and shifted up safely from baseline */}
-                <g transform="translate(340, 134) scale(0.8) translate(-340, -170)">
+                <g transform="translate(400, 131) scale(0.88) translate(-380, -170)">
                     {/* Layer 1: Deep shadow offset (gives 3D depth) */}
                     <g transform="translate(4, 6)">
                         <use href="#motherChildM1" fill="rgba(130, 20, 50, 0.45)" />
@@ -212,9 +212,9 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
 
                     {/* Inner text for the Heart (scales beautifully with MIMO) */}
                     <g filter="url(#textGlow)">
-                        <text className="animate-heartbeat-text" x="562" textAnchor="middle" fontFamily="'Dancing Script', cursive" fontWeight="700" fill="#ffffff">
-                            <tspan x="562" y="90" fontSize="28">Love you</tspan>
-                            <tspan x="562" y="125" fontSize="34">Mom</tspan>
+                        <text className="animate-heartbeat-text" x="572" textAnchor="middle" fontFamily="'Dancing Script', cursive" fontWeight="700" fill="#ffffff">
+                            <tspan x="572" y="90" fontSize="28">Love you</tspan>
+                            <tspan x="572" y="125" fontSize="34">Mom</tspan>
                         </text>
                     </g>
 
@@ -223,21 +223,21 @@ export const DynamicLogo: React.FC<DynamicLogoProps> = ({ forceTheme }) => {
                 {/* Text centered gracefully below the logo with elegant decorations */}
                 <g filter="url(#textGlow)">
                     {/* Left decorative tiny heart */}
-                    <g transform="translate(145, 160) scale(0.7) rotate(-20)">
+                    <g transform="translate(185, 160) scale(0.7) rotate(-20)">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#heartGrad)" />
                     </g>
                     
                     {/* Right decorative tiny heart */}
-                    <g transform="translate(515, 165) scale(0.5) rotate(15)">
+                    <g transform="translate(565, 165) scale(0.5) rotate(15)">
                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="url(#heartGrad)" />
                     </g>
 
-                    <text x="340" y="184" textAnchor="middle" fontFamily="'Dancing Script', cursive" fontWeight="700" fontSize="34" fill="url(#mimoFillGrad)" letterSpacing="1">
+                    <text x="380" y="182" textAnchor="middle" fontFamily="'Dancing Script', cursive" fontWeight="700" fontSize="34" fill="url(#mimoFillGrad)" letterSpacing="1">
                         Happy Mother's Day
                     </text>
 
                     {/* Delicate curved underline swash */}
-                    <path d="M 230 194 Q 340 198, 450 194" fill="none" stroke="url(#mimoFillGrad)" strokeWidth="1.5" strokeLinecap="round" />
+                    <path d="M 265 194 Q 380 198, 495 194" fill="none" stroke="url(#mimoFillGrad)" strokeWidth="1.5" strokeLinecap="round" />
                 </g>
             </svg>
         </>

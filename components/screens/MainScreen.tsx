@@ -115,7 +115,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
 
             <main className="immersive-container">
                 <section className="brand-panel">
-                    <div style={{ opacity: 0.8 }}>
+                    <div style={{ opacity: 0.8, transform: 'translateY(-7px)' }}>
                         <p className="tag-line">— WELCOME TO —</p>
                     </div>
                     <div className="main-heading">
@@ -132,7 +132,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
                     <div 
                         className={`swipe-track-glass ${isUnlocked ? 'unlocked' : ''}`} 
                         ref={trackRef}
-                        style={{ width: '680px' }}
+                        style={{ width: '760px' }}
                     >
                         <div className="glass-reflection"></div>
                         
