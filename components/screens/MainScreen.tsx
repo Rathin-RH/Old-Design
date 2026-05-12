@@ -115,13 +115,13 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
 
             <main className="immersive-container">
                 <section className="brand-panel">
-                    <div style={{ opacity: 0.8, transform: 'translateY(-7px)' }}>
+                    <div style={{ opacity: 0.8 }}>
                         <p className="tag-line">— WELCOME TO —</p>
                     </div>
                     <div className="main-heading">
                         <DynamicLogo forceTheme="eco" />
                     </div>
-                    <div className="sub-heading-wrap" style={{ marginTop: '-18px' }}>
+                    <div className="sub-heading-wrap" style={{ marginTop: '-25px' }}>
                         <h2 className="sub-heading">Self-Service <span className="cyan-text">Printing Kiosk</span></h2>
                     </div>
                     <p className="brand-desc" style={{ transform: 'translateY(-11px)' }}>Fast, secure document printing via Mimo code.</p>
@@ -132,7 +132,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
                     <div 
                         className={`swipe-track-glass ${isUnlocked ? 'unlocked' : ''}`} 
                         ref={trackRef}
-                        style={{ width: '760px' }}
+                        style={{ width: '680px' }}
                     >
                         <div className="glass-reflection"></div>
                         
@@ -188,7 +188,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
             </main>
             
             <footer className="kiosk-footer" style={{ position: 'absolute', bottom: '30px', left: 0, right: 0, textAlign: 'center', zIndex: 10, padding: 0 }}>
-                Software designed by <strong>Rathindra.</strong><br/>&copy; 2026 <strong>VisionPrintt</strong>. All rights reserved.
+                Software designed and developed by <strong>Rathindra.</strong><br/>&copy; 2026 <strong>VisionPrintt</strong>. All rights reserved.
             </footer>
 
             <style>{`
