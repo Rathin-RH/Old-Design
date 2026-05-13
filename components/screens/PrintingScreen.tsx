@@ -22,30 +22,42 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   const [typedSub, setTypedSub] = useState('');
   const intervalRef = useRef<number | null>(null);
   const completionTimerRef = useRef<number | null>(null);
+  // Guard so we only trigger the ejection wait once
+  const ejectingRef = useRef(false);
 
-  // Sync with manualProgress if provided
+  // Paper ejection buffer: 3s base + 2s per extra page, capped at 20s
+  // The screen stays at 99% during this time — no visual change, just correct timing.
+  const ejectDelayMs = Math.min(3000 + (pages - 1) * 2000, 20000);
+
+  // Triggered when CUPS reports the job as completed (manualProgress >= 100)
   useEffect(() => {
-    if (manualProgress !== undefined) {
-      if (manualProgress >= 100 && isActive) {
-        if (intervalRef.current) {
-            clearInterval(intervalRef.current);
-            intervalRef.current = null;
-        }
-        setProgress(100); // Ensure it reaches 100% visually
-        if (completionTimerRef.current) clearTimeout(completionTimerRef.current);
+    if (manualProgress !== undefined && manualProgress >= 100 && isActive && !ejectingRef.current) {
+      ejectingRef.current = true;
+
+      // Stop the progress ticker — hold at 99% while paper physically ejects
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+
+      // Wait for paper to physically come out, then snap to 100% and go to Summary
+      if (completionTimerRef.current) clearTimeout(completionTimerRef.current);
+      completionTimerRef.current = window.setTimeout(() => {
+        setProgress(100);
         completionTimerRef.current = window.setTimeout(() => {
           onComplete();
           completionTimerRef.current = null;
-        }, 1500);
-      }
+        }, 600);
+      }, ejectDelayMs);
     }
-  }, [manualProgress, onComplete, isActive]);
+  }, [manualProgress, onComplete, isActive, ejectDelayMs]);
 
   useEffect(() => {
     if (!isActive) {
       setProgress(0);
       setTypedTitle('');
       setTypedSub('');
+      ejectingRef.current = false;
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
@@ -77,10 +89,10 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
        if (subIdx >= targetSub.length) clearInterval(subInterval);
     }, 30);
 
-    // Fixed 15-second loading experience
+    // Fixed 15-second loading experience — stops at 99% to wait for CUPS
     if (!intervalRef.current) {
-      const totalTime = 15000; // Exactly 15 seconds
-      const stepTime = totalTime / 100; // 150ms per 1%
+      const totalTime = 15000;
+      const stepTime = totalTime / 100;
 
       intervalRef.current = window.setInterval(() => {
         setProgress((prev) => {
@@ -91,9 +103,9 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
              }
              return 100;
           }
-          // If we have manual progress from Firestore, sync to it
+          // Sync to Firestore progress if it's ahead (but never past 99 — ejection wait handles 100)
           if (manualProgress !== undefined && manualProgress > prev) {
-             return manualProgress;
+             return Math.min(manualProgress, 99);
           }
 
           const next = prev + 1;
@@ -102,8 +114,7 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 clearInterval(intervalRef.current);
                 intervalRef.current = null;
              }
-             // Stop at 99%. We wait for manualProgress to reach 100% 
-             // to trigger the actual completion and screen transition.
+             // Hold at 99% — silently waiting for ejection buffer to expire
              return 99;
           }
           return next;
@@ -115,9 +126,7 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
        clearInterval(titleInterval);
        clearInterval(subInterval);
     };
-  }, [isActive, onComplete, statusTitle, statusSub, pages, manualProgress]);
-
-  // Continuous rotation for running effect could be added here, but running digits is enough based on request.
+  }, [isActive, statusTitle, statusSub, manualProgress]);
 
   const radius = 140;
   const circumference = 2 * Math.PI * radius;
