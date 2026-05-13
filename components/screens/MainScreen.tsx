@@ -119,7 +119,7 @@ export const MainScreen: React.FC<MainScreenProps> = ({ onNext, isActive }) => {
                         <p className="tag-line">— WELCOME TO —</p>
                     </div>
                     <div className="main-heading">
-                        <DynamicLogo forceTheme="eco" />
+                        <DynamicLogo forceTheme="default" />
                     </div>
                     <div className="sub-heading-wrap" style={{ marginTop: '-25px' }}>
                         <h2 className="sub-heading">Self-Service <span className="cyan-text">Printing Kiosk</span></h2>
