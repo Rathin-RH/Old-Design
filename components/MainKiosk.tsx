@@ -649,12 +649,8 @@ const [failureMessage, setFailureMessage] = useState('');
 
       <PrintingScreen
         isActive={currentScreen === 'printing-screen'}
-        statusTitle={printSuccess ? 'Completed' : `Hello ${jobData?.userName?.split(' ')[0] || 'User'}..!`}
-        statusSub={
-          printSuccess
-            ? 'Your document has been printed successfully.'
-            : `Printing in progress…\nPlease wait.`
-        }
+        statusTitle={`Hello ${jobData?.userName?.split(' ')[0] || 'User'}..!`}
+        statusSub={`Printing in progress…\nPlease wait.`}
         pages={jobData?.pages || 1}
         duplex={jobData?.duplex ?? false}
         manualProgress={manualProgress}
