@@ -150,6 +150,8 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         }}
     >
         <style>{`
+            @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+            
             @keyframes spin-slow {
                 100% { transform: rotate(360deg); }
             }
@@ -173,14 +175,13 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
             }
             .music-particle {
                 position: absolute;
-                color: rgba(52,211,153,0.8);
-                font-family: 'Material Symbols Outlined';
+                color: rgba(251, 113, 133, 0.8);
                 font-size: 52px;
                 font-variation-settings: 'FILL' 1;
-                filter: drop-shadow(0 4px 12px rgba(52,211,153,0.4));
+                filter: drop-shadow(0 4px 12px rgba(251, 113, 133, 0.4));
                 animation: float-note 2.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
             }
-            .particle-2 { animation-delay: 0.9s; top: 15px; font-size: 38px; color: rgba(80, 200, 220, 0.8); }
+            .particle-2 { animation-delay: 0.9s; top: 15px; font-size: 38px; color: rgba(253, 164, 175, 0.8); }
             .particle-3 { animation-delay: 1.8s; top: -15px; font-size: 46px; }
             
             @keyframes data-stream {
@@ -188,13 +189,28 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 100% { background-position: 200% 0; }
             }
             .data-text-highlight {
-                background: linear-gradient(90deg, #ffffff 0%, var(--teal-bright) 30%, #ffffff 60%);
+                background: linear-gradient(90deg, #ffffff 0%, #fb7185 30%, #ffffff 60%);
                 background-size: 200% auto;
                 color: #fff;
                 background-clip: text;
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 animation: data-stream 3s linear infinite;
+            }
+            .love-message {
+                font-family: 'Great Vibes', cursive;
+                font-size: 62px;
+                color: #fda4af;
+                text-shadow: 0 4px 12px rgba(251, 113, 133, 0.4);
+                display: flex;
+                align-items: center;
+                gap: 20px;
+                margin-top: -10px;
+            }
+            .love-note {
+                font-family: 'Plus Jakarta Sans', sans-serif;
+                font-size: 60px;
+                color: #f43f5e;
             }
         `}</style>
 
@@ -207,6 +223,12 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '36px', fontWeight: 500, lineHeight: '1.4', whiteSpace: 'pre-line' }}>
                     {typedSub}
                 </p>
+                
+                <div className="love-message" style={{ marginTop: '40px', opacity: isActive ? 1 : 0, transition: 'opacity 0.5s ease-in' }}>
+                    <span className="love-note">♪</span>
+                    Printing with Love
+                    <span className="love-note">♫</span>
+                </div>
             </div>
         </div>
 
@@ -216,9 +238,9 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
             {/* Musical Notes Flying In (Visual effect) */}
             {isActive && progress < 100 && (
                 <div style={{ position: 'absolute', left: '-150px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
-                    <div className="music-particle">music_note</div>
-                    <div className="music-particle particle-2">music_note</div>
-                    <div className="music-particle particle-3">music_note</div>
+                    <div className="music-particle">♪</div>
+                    <div className="music-particle particle-2">♫</div>
+                    <div className="music-particle particle-3">♬</div>
                 </div>
             )}
 
@@ -229,7 +251,7 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                     width: '300px',
                     height: '300px',
                     borderRadius: '50%',
-                    background: 'var(--teal)',
+                    background: '#fb7185',
                     filter: 'blur(70px)',
                     opacity: 0.15 + (progress / 100) * 0.45,
                     transition: 'opacity 0.3s',
@@ -239,11 +261,11 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 {isActive && progress < 100 && (
                     <>
                         <div style={{
-                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.5)',
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(251, 113, 133, 0.5)',
                             animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite', pointerEvents: 'none'
                         }}></div>
                         <div style={{
-                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(80, 200, 220, 0.2)',
+                            position: 'absolute', inset: '45px', borderRadius: '50%', border: '2px solid rgba(251, 113, 133, 0.2)',
                             animation: 'pulse-ring 3s cubic-bezier(0.2, 0.6, 0.3, 1) infinite 1.5s', pointerEvents: 'none'
                         }}></div>
                     </>
@@ -252,8 +274,8 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 <svg width="380" height="380" style={{ position: 'absolute', zIndex: 2 }}>
                     <defs>
                         <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="var(--teal-bright)" />
-                            <stop offset="100%" stopColor="#10b981" />
+                            <stop offset="0%" stopColor="#fda4af" />
+                            <stop offset="100%" stopColor="#f43f5e" />
                         </linearGradient>
                     </defs>
 
