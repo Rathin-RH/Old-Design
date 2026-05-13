@@ -35,6 +35,7 @@ type JobData = {
   pages: number;
   copies: number;
   mode: string;
+  duplex?: boolean;
   documentUrl?: string;
   progress?: number;
   status?: string;
@@ -473,6 +474,7 @@ const [failureMessage, setFailureMessage] = useState('');
           pages: Number(data.pages ?? 1),
           copies: Number(data.settings?.copies ?? data.copies ?? 1),
           mode: data.settings?.colorMode ?? data.mode ?? 'Black & White',
+          duplex: Boolean(data.settings?.duplex ?? data.duplex ?? false),
           documentUrl,
           progress: 0,
           status: 'printing',
@@ -654,6 +656,7 @@ const [failureMessage, setFailureMessage] = useState('');
             : `Printing in progress…\nPlease wait.`
         }
         pages={jobData?.pages || 1}
+        duplex={jobData?.duplex ?? false}
         manualProgress={manualProgress}
         onComplete={goToSummary}
       />

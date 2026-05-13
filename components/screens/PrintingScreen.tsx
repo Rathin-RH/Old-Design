@@ -6,6 +6,7 @@ interface PrintingScreenProps {
   statusSub?: string;
   onComplete: () => void;
   pages?: number;
+  duplex?: boolean;
   manualProgress?: number;
 }
 
@@ -15,6 +16,7 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   statusSub, 
   onComplete,
   pages = 1,
+  duplex = false,
   manualProgress 
 }) => {
   const [progress, setProgress] = useState(0);
@@ -25,9 +27,14 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
   // Guard so we only trigger the ejection wait once
   const ejectingRef = useRef(false);
 
-  // Paper ejection buffer: 3s base + 2s per extra page, capped at 20s
-  // The screen stays at 99% during this time — no visual change, just correct timing.
-  const ejectDelayMs = Math.min(3000 + (pages - 1) * 2000, 20000);
+  // Paper ejection buffer — accounts for physical printer mechanics:
+  //   Single-sided: 5s base + 3s per extra page, max 25s
+  //   Duplex: 20s base + 5s per physical sheet, max 60s
+  //   (Duplex reverses paper internally before printing side 2 — takes much longer)
+  const physicalSheets = Math.ceil(pages / 2);
+  const ejectDelayMs = duplex
+    ? Math.min(20000 + (physicalSheets - 1) * 5000, 60000)
+    : Math.min(5000 + (pages - 1) * 3000, 25000);
 
   // Triggered when CUPS reports the job as completed (manualProgress >= 100)
   useEffect(() => {
