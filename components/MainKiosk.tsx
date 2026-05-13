@@ -418,7 +418,12 @@ const [failureMessage, setFailureMessage] = useState('');
           return;
         }
 
-        // 2) THEN: Check printer status only after code is validated
+        // 2) THEN: Check printer status only after code is validated.
+        // NOTE: If the status endpoint is unreachable (network/CORS/mixed-content),
+        // we get 'disconnected' — but the Pi and printer may still be working fine.
+        // We only hard-block on explicit 'maintenance' state.
+        // A failed status check is treated as a WARNING, not a fatal error,
+        // so the print attempt itself will surface the real error if Pi is down.
         const livePrinterStatus = await fetchLivePrinterStatus();
 
         if (livePrinterStatus === 'maintenance') {
@@ -428,15 +433,10 @@ const [failureMessage, setFailureMessage] = useState('');
           return;
         }
 
-        if (
-          livePrinterStatus === 'disconnected' ||
-          livePrinterStatus === 'offline' ||
-          livePrinterStatus === 'error'
-        ) {
-          showToast('Printer unavailable', true);
-          setCurrentScreen('system-error-screen');
-          setCode('');
-          return;
+        if (livePrinterStatus === 'disconnected' || livePrinterStatus === 'offline' || livePrinterStatus === 'error') {
+          // Log the warning but do NOT block — let the actual /api/print call
+          // determine if the printer is truly unavailable.
+          console.warn('[Kiosk] Printer status check returned:', livePrinterStatus, '— proceeding with print attempt anyway.');
         }
 
         // 3) Code is valid & printer is ready — proceed with printing
