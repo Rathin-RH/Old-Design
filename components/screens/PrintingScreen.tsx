@@ -161,29 +161,27 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
                 50% { opacity: 0.8; }
                 100% { transform: scale(1.4); opacity: 0; }
             }
-            @keyframes float-page {
+            @keyframes float-note {
                 0% { transform: translate(0, 0) scale(0.6) rotate(-10deg); opacity: 0; }
-                20% { opacity: 0.9; transform: translate(40px, -15px) scale(0.7) rotate(-5deg); }
-                80% { opacity: 0.9; transform: translate(120px, -45px) scale(0.8) rotate(5deg); }
-                100% { transform: translate(160px, -60px) scale(0.5) rotate(15deg); opacity: 0; }
+                20% { opacity: 0.9; transform: translate(40px, -25px) scale(0.8) rotate(5deg); }
+                80% { opacity: 0.9; transform: translate(120px, -65px) scale(1) rotate(-5deg); }
+                100% { transform: translate(160px, -90px) scale(0.6) rotate(15deg); opacity: 0; }
             }
             @keyframes text-glow-pulse {
                 0%, 100% { filter: drop-shadow(0 0 15px rgba(52,211,153,0.3)); }
                 50% { filter: drop-shadow(0 0 35px rgba(52,211,153,0.7)); }
             }
-            .printing-particle {
+            .music-particle {
                 position: absolute;
-                width: 38px;
-                height: 48px;
-                border: 1px solid rgba(255,255,255,0.3);
-                background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.02) 100%);
-                backdrop-filter: blur(4px);
-                border-radius: 6px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-                animation: float-page 2.5s cubic-bezier(0.25, 1, 0.5, 1) infinite;
+                color: rgba(52,211,153,0.8);
+                font-family: 'Material Symbols Outlined';
+                font-size: 52px;
+                font-variation-settings: 'FILL' 1;
+                filter: drop-shadow(0 4px 12px rgba(52,211,153,0.4));
+                animation: float-note 2.8s cubic-bezier(0.25, 1, 0.5, 1) infinite;
             }
-            .particle-2 { animation-delay: 0.8s; top: 20px; }
-            .particle-3 { animation-delay: 1.6s; top: -10px; }
+            .particle-2 { animation-delay: 0.9s; top: 15px; font-size: 38px; color: rgba(80, 200, 220, 0.8); }
+            .particle-3 { animation-delay: 1.8s; top: -15px; font-size: 46px; }
             
             @keyframes data-stream {
                 0% { background-position: -200% 0; }
@@ -215,12 +213,12 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
         {/* Right Column: Giant Progress Indicator */}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
             
-            {/* Holographic Pages Flying In (Visual effect) */}
+            {/* Musical Notes Flying In (Visual effect) */}
             {isActive && progress < 100 && (
-                <div style={{ position: 'absolute', left: '-140px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
-                    <div className="printing-particle"></div>
-                    <div className="printing-particle particle-2"></div>
-                    <div className="printing-particle particle-3"></div>
+                <div style={{ position: 'absolute', left: '-150px', top: '50%', transform: 'translateY(-50%)', zIndex: 1, pointerEvents: 'none' }}>
+                    <div className="music-particle">music_note</div>
+                    <div className="music-particle particle-2">music_note</div>
+                    <div className="music-particle particle-3">music_note</div>
                 </div>
             )}
 
