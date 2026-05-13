@@ -110,10 +110,6 @@ export const PrintingScreen: React.FC<PrintingScreenProps> = ({
              }
              return 100;
           }
-          // Sync to Firestore progress if it's ahead (but never past 99 — ejection wait handles 100)
-          if (manualProgress !== undefined && manualProgress > prev) {
-             return Math.min(manualProgress, 99);
-          }
 
           const next = prev + 1;
           if (next >= 99) {
